@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Web;
+using System.Web.Http.Routing;
 using System.Web.Mvc;
 
 namespace IP3_Group4.Controllers
@@ -27,21 +28,23 @@ namespace IP3_Group4.Controllers
             {
                 if (file.ContentLength > 0)
                 {
-                    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "project-optic-f9d22c3d58c9.json");
+                    string filePath = Server.MapPath(Url.Content("~/ip3-receiptscanner-2ba7c0c23963.json"));
 
-                    System.Drawing.Image source = System.Drawing.Image.FromStream(file.InputStream, true, true);
+                    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", filePath);
+
+                    //System.Drawing.Image source = System.Drawing.Image.FromStream(file.InputStream, true, true);
                     Google.Cloud.Vision.V1.Image img = new Google.Cloud.Vision.V1.Image();
-                    img.Image
+                    img = Google.Cloud.Vision.V1.Image.FromStream(file.InputStream);
 
                     ImageAnnotatorClient client = ImageAnnotatorClient.Create();
-                    TextAnnotation text = client.DetectDocumentText(img);
+                    TextAnnotation response = client.DetectDocumentText(img);
 
-                    ViewBag.Message = text;
+                    
 
                     return View();
                 } else
                 {
-                    throw new System.Exception();
+                    throw new Exception();
                 }
             }
             catch
