@@ -11,10 +11,19 @@ namespace IP3_Group4.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+
+        [Required]
         public string Shop { get; set; }
-        public string Brand { get; set; }
         public decimal TotalPrice { get; set; }
+
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}"), Required]
         public DateTime PurchaseDate { get; set; }
+
+        public Receipt(string Shop, DateTime PurchaseDate)
+        {
+            this.Shop = Shop;
+            this.PurchaseDate = PurchaseDate;
+        }
 
         #region Creator Properties
         [Display(Name = "Payment Type"), ForeignKey("PaymentType")]
@@ -53,8 +62,9 @@ namespace IP3_Group4.Models
     public class ProductLine
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int ID { get; set; }  
         public string ItemName { get; set; }
+        public string Brand { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public decimal LineTotal => (Price *= Quantity);
