@@ -54,7 +54,7 @@ namespace IP3_Group4.Models
         }
 
         #region ProductLines Properties
-        public List<Receipt> Receipt { get; set; }
+        public List<Receipt> Receipts { get; set; }
         #endregion
     }
 
