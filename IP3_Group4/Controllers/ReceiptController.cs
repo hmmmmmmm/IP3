@@ -2,18 +2,16 @@
 using IP3_Group4.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Net;
+using System.Linq;
 using System.Web;
-using System.Web.Http.Routing;
 using System.Web.Mvc;
 
 namespace IP3_Group4.Controllers
 {
-    public class VisionController : Controller
+    public class ReceiptController : Controller
     {
+        // Used to handle Views relating to the uploading, editing, and viewing of receipts
+
         // GET: Vision
         [HttpGet]
         public ActionResult UploadReceipt()
@@ -39,10 +37,11 @@ namespace IP3_Group4.Controllers
                     ImageAnnotatorClient client = ImageAnnotatorClient.Create();
                     TextAnnotation response = client.DetectDocumentText(img);
 
-                    
+
 
                     return View();
-                } else
+                }
+                else
                 {
                     throw new Exception();
                 }
@@ -52,6 +51,22 @@ namespace IP3_Group4.Controllers
                 ViewBag.Message = "File upload failed!!";
                 return View();
             }
+        }
+
+        public ActionResult EditReceipt()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditReceipt(Receipt receipt)
+        {
+            return View();
+        }
+
+        public ActionResult Overview()
+        {
+            return View();
         }
     }
 }

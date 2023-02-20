@@ -259,7 +259,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\VisionController.cs" />
+    <Compile Include="Controllers\ReceiptController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Data\DBContext.cs" />
     <Compile Include="Data\DBInit.cs" />
     <Compile Include="Global.asax.cs">
@@ -328,7 +329,12 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Vision\UploadReceipt.cshtml" />
+    <Content Include="Views\Receipt\UploadReceipt.cshtml" />
+    <Content Include="Views\Receipt\EditReceipt.cshtml" />
+    <Content Include="Views\Receipt\Overview.cshtml" />
+    <Content Include="Views\Stats\Dashboard.cshtml" />
+    <Content Include="Views\Stats\Spending.cshtml" />
+    <Content Include="Views\Stats\Budget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
