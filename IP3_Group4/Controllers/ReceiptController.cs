@@ -86,11 +86,13 @@ namespace IP3_Group4.Controllers
                         // checks if next line is the payment method
                         if (lines[i].ToLower().Contains("paid by"))
                         {
-                            if (lines[i + 1].ToLower().Contains("card")) // if payment type is card, deals with it
+                            i++;
+
+                            if (lines[i].ToLower().Contains("card")) // if payment type is card, deals with it
                             {
                                 receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
 
-                            } else if (lines[i + 1].ToLower().Contains("cash")) // if payment type is cash, deals with it
+                            } else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
                             {
                                 receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
                             }
@@ -105,7 +107,7 @@ namespace IP3_Group4.Controllers
                         // checks if next line is the Date/Time of purchase
                         if (lines[i].ToLower().Contains("customer receipt"))
                         {
-                            DateTime dt = DateTime.Parse(lines[i + 1].ToLower()); // retrieves the Date/Time of the purchase
+                            DateTime dt = DateTime.Parse(lines[++i].ToLower()); // retrieves the Date/Time of the purchase
                             receipt.PurchaseDate = dt; // sets the receipt DateTime to string just read in
                         }
 
