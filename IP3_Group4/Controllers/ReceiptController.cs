@@ -47,83 +47,103 @@ namespace IP3_Group4.Controllers
 
                     // for debugging: prints API output line by line to console
                     System.Diagnostics.Debug.WriteLine(response[0].Description);
+
+                    // creates a list of strings equal to the output of the API's first index (the entire receipt in a usable format)
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
+                    ReceiptTemplate template;
 
-                    // loops through every line in the scanned receipt
-                    for (int i = 1; i < lines.Count; i++)
+
+                    if (lines.Contains("B&M Retail Ltd"))
                     {
-                        // checks if scanner has reached the start of the products list
-                        if (!hasProds && lines[i].ToLower().Contains("customer copy")) { 
+                        template = db.ReceiptTemplates.First(rt => rt.Shop == "b&m retail ltd");
+                    } else if (lines.Contains("Sainsbury's Supermarkets Ltd"))
+                    {
+                        template = db.ReceiptTemplates.First(rt => rt.Shop == "sainsbury's supermarkets ltd");
+                    } else
+                    {
+                        throw new Exception("No template found");
+                    }
 
-                            receipt.Shop = "B&M Retail Ltd"; // sets name of the shop bought from
-                            hasProds = true; // tells app it has found the list of products
-
-
-                            i++; // skips to line after products list start marker
-                            do
-                            {
-                                ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
-
-                                if (lines[++i].ToLower().Contains(" x ")) // checks if the next line is a quantity line
-                                {
-                                    string[] quantArr = lines[i].Split(' '); // splits quantity line into sections: 0 = quantity, 2 = price per item
-                                    pl.Quantity = int.Parse(quantArr[0]); // sets quantity in ProductLine
-                                    pl.Price = decimal.Parse(quantArr[2]); // sets price per item in ProductLine
-                                    i++; // skips to next line so quantity line isnt added as a product
-                                }
-                                else // if there is no quantity line for the product
-                                {
-                                    pl.Quantity = 1; // sets quantity to 1
-                                }
-
-                                receipt.ProductLines.Add(pl); // adds ProductLine to receipt object
-
-                            } while (!lines[i].ToLower().Contains(" items")); // checks for end of product list
-
-                            continue;
-                        }
-
-                        // checks if next line is the payment method
-                        if (lines[i].ToLower().Contains("paid by"))
+                    if (template != null)
+                    {
+                        // loops through every line in the scanned receipt
+                        for (int i = 0; i < lines.Count; i++)
                         {
-                            i++;
+                            // checks if scanner has reached the start of the products list
+                            if (!hasProds && lines[i].ToLower().Contains(template.ProductStartPrompt))
+                            {
 
-                            if (lines[i].ToLower().Contains("card")) // if payment type is card, deals with it
-                            {
-                                receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
+                                receipt.Shop = template.Shop; // sets name of the shop bought from
+                                hasProds = true; // tells app it has found the list of products
 
-                            } else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
-                            {
-                                receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
-                            }
-                            else // if payment type is neither, deals with it
-                            {
-                                throw new Exception("PaymentType Not Found");
+
+                                i++; // skips to line after products list start marker
+                                do
+                                {
+                                    ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
+
+                                    if (lines[++i].ToLower().Contains(template.QuantityLineFormat)) // checks if the next line is a quantity line
+                                    {
+                                        string[] quantArr = lines[i].Split(' '); // splits quantity line into sections: 0 = quantity, 2 = price per item
+                                        pl.Quantity = int.Parse(quantArr[0]); // sets quantity in ProductLine
+                                        pl.Price = decimal.Parse(quantArr[2].Replace("£", "")); // sets price per item in ProductLine, also removes an pound signs
+                                        i++; // skips to next line so quantity line isnt added as a product
+                                    }
+                                    else // if there is no quantity line for the product
+                                    {
+                                        pl.Quantity = 1; // sets quantity to 1
+                                    }
+
+                                    receipt.ProductLines.Add(pl); // adds ProductLine to receipt object
+
+                                } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
+
+                                continue;
                             }
 
-                            continue;
-                        }
-
-                        // checks if next line is the Date/Time of purchase
-                        if (lines[i].ToLower().Contains("customer receipt"))
-                        {
-                            DateTime dt = DateTime.Parse(lines[++i].ToLower()); // retrieves the Date/Time of the purchase
-                            receipt.PurchaseDate = dt; // sets the receipt DateTime to string just read in
-                        }
-
-                        // checks if the line is a price or not, and starts getting prices if they are
-                        if (lines[i].ToLower().Contains("£"))
-                        {
-                            for (int j = 0; j < receipt.ProductLines.Count; j++) // loops through all read-in products
+                            // checks if next line is the payment method
+                            if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
                             {
-                                if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
+                                i++;
+
+                                if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
                                 {
-                                    receipt.ProductLines[j].Price = decimal.Parse(lines[i].Substring(1)); // if no price attached, sets item price to the read-in value
+                                    receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
+
+                                }
+                                else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
+                                {
+                                    receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
+                                }
+                                else // if payment type is neither, deals with it
+                                {
+                                    throw new Exception("PaymentType Not Found");
                                 }
 
-                                i++; // goes to next scanner line to avoid repetition
+                                continue;
                             }
-                            break; // once prices are read, we dont need anymore info
+
+                            // checks if next line is the Date/Time of purchase
+                            if (template.DateTimePrompt != "" && lines[i].ToLower().Contains(template.DateTimePrompt))
+                            {
+                                DateTime dt = DateTime.Parse(lines[++i].ToLower()); // retrieves the Date/Time of the purchase
+                                receipt.PurchaseDate = dt; // sets the receipt DateTime to string just read in
+                            }
+
+                            // checks if the line is a price or not, and starts getting prices if they are
+                            if (lines[i].ToLower().Contains("£"))
+                            {
+                                for (int j = 0; j < receipt.ProductLines.Count; j++) // loops through all read-in products
+                                {
+                                    if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
+                                    {
+                                        receipt.ProductLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value
+                                    }
+
+                                    i++; // goes to next scanner line to avoid repetition
+                                }
+                                break; // once prices are read, we dont need anymore info
+                            }
                         }
                     }
 
@@ -139,11 +159,12 @@ namespace IP3_Group4.Controllers
                 }
                 else
                 {
-                    throw new Exception("Brokey");
+                    throw new Exception("something went wrong with file upload");
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Error in " + ex.Source + ": " + ex.Message);
                 ViewBag.Message = "File upload failed!!";
                 return View();
             }

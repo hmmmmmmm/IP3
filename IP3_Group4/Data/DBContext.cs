@@ -17,6 +17,8 @@ namespace IP3_Group4.Data
 
         public DbSet<PaymentType> PaymentTypes { get; set; }
 
+        public DbSet<ReceiptTemplate> ReceiptTemplates { get; set; }
+
         public DBContext()
             : base("ReceiptBudgetApp", throwIfV1Schema: false)
         {
