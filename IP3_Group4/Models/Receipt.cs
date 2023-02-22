@@ -25,6 +25,15 @@ namespace IP3_Group4.Models
             this.PurchaseDate = PurchaseDate;
         }
 
+        public Receipt()
+        {
+            this.ID = 0;
+            this.Shop = "";
+            this.TotalPrice = 0;
+            this.PurchaseDate = DateTime.UtcNow;
+
+        }
+
         #region Creator Properties
         [Display(Name = "Payment Type"), ForeignKey("PaymentType")]
         public int PaymentID { get; set; }
@@ -53,6 +62,12 @@ namespace IP3_Group4.Models
             this.Type = Type;
         }
 
+        public PaymentType()
+        {
+            this.ID = 0;
+            this.Type = "";
+        }
+
         #region ProductLines Properties
         public List<Receipt> Receipts { get; set; }
         #endregion
@@ -74,6 +89,15 @@ namespace IP3_Group4.Models
             this.ItemName = ItemName;
             this.Quantity = Quantity;
             this.Price = Price;
+        }
+
+        public ProductLine()
+        {
+            this.ID = 0;
+            this.ItemName = "";
+            this.Brand = "";
+            this.Quantity = 0;
+            this.Price = 0;
         }
 
         #region Poster Properties
