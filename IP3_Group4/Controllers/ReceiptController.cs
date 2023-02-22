@@ -43,7 +43,7 @@ namespace IP3_Group4.Controllers
                     var response = client.DetectText(img); // calls method to detect text within image
 
                     Receipt receipt = new Receipt(); // creates receipt object to fill
-                    bool inProds = false, startInTwo = false, hasProds = false, hasPrices = false; // inProds: keeps track of if the program is inside the products list. startInTwo: maybe irrelevant. hasProds: tells app if it already has accessed the products list. // hasPrices tells program if it has the prices.
+                    bool hasProds = false; // tells app if it already has accessed the products list.
 
                     // for debugging: prints API output line by line to console
                     System.Diagnostics.Debug.WriteLine(response[0].Description);
@@ -53,55 +53,32 @@ namespace IP3_Group4.Controllers
                     for (int i = 1; i < lines.Count; i++)
                     {
                         // checks if scanner has reached the start of the products list
-                        if (!hasProds && lines[i].ToLower().Contains("customer copy"))
-                        {
-
-                            System.Diagnostics.Debug.WriteLine("Found product start");
+                        if (!hasProds && lines[i].ToLower().Contains("customer copy")) { 
 
                             receipt.Shop = "B&M Retail Ltd"; // sets name of the shop bought from
-                            //startInTwo = true;
                             hasProds = true; // tells app it has found the list of products
-                            inProds = true;
-                            continue;
-                        }
 
-                        //if (startInTwo)
-                        //{
-                        //    inProds = true;
-                        //    startInTwo = false;
-                        //    continue;
-                        //}
 
-                        // checks if app has reached the end of the product list
-                        if (lines[i].ToLower().Contains(" items"))
-                        {
-
-                            System.Diagnostics.Debug.WriteLine("Found product end");
-
-                            inProds = false; // tells app it is now longer in the products list
-                            continue;
-                        }
-
-                        // if app is in the collection of products
-                        if (inProds)
-                        {
-
-                            System.Diagnostics.Debug.WriteLine("Found a product");
-
-                            ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
-
-                            if (lines[i + 1].ToLower().Contains(" x ")) // checks if the next line is a quantity line
+                            i++; // skips to line after products list start marker
+                            do
                             {
-                                i++; // if a quantity line, moves scanner to that line
-                                string[] quantArr = lines[i].Split(' '); // splits quantity line into sections: 0 = quantity, 2 = price per item
-                                pl.Quantity = int.Parse(quantArr[0]); // sets quantity in ProductLine
-                                pl.Price = decimal.Parse(quantArr[2]); // sets price per item in ProductLine
-                            } else // if there is no quantity line for the product
-                            {
-                                pl.Quantity = 1; // sets quantity to 1
-                            }
+                                ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
 
-                            receipt.ProductLines.Add(pl); // adds ProductLine to receipt
+                                if (lines[++i].ToLower().Contains(" x ")) // checks if the next line is a quantity line
+                                {
+                                    string[] quantArr = lines[i].Split(' '); // splits quantity line into sections: 0 = quantity, 2 = price per item
+                                    pl.Quantity = int.Parse(quantArr[0]); // sets quantity in ProductLine
+                                    pl.Price = decimal.Parse(quantArr[2]); // sets price per item in ProductLine
+                                    i++; // skips to next line so quantity line isnt added as a product
+                                }
+                                else // if there is no quantity line for the product
+                                {
+                                    pl.Quantity = 1; // sets quantity to 1
+                                }
+
+                                receipt.ProductLines.Add(pl); // adds ProductLine to receipt object
+
+                            } while (!lines[i].ToLower().Contains(" items")); // checks for end of product list
 
                             continue;
                         }
@@ -109,9 +86,6 @@ namespace IP3_Group4.Controllers
                         // checks if next line is the payment method
                         if (lines[i].ToLower().Contains("paid by"))
                         {
-
-                            System.Diagnostics.Debug.WriteLine("Found payment type");
-
                             if (lines[i + 1].ToLower().Contains("card")) // if payment type is card, deals with it
                             {
                                 receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
@@ -131,19 +105,13 @@ namespace IP3_Group4.Controllers
                         // checks if next line is the Date/Time of purchase
                         if (lines[i].ToLower().Contains("customer receipt"))
                         {
-
-                            System.Diagnostics.Debug.WriteLine("Found DateTime");
-
                             DateTime dt = DateTime.Parse(lines[i + 1].ToLower()); // retrieves the Date/Time of the purchase
                             receipt.PurchaseDate = dt; // sets the receipt DateTime to string just read in
                         }
 
                         // checks if the line is a price or not, and starts getting prices if they are
-                        if (!hasPrices && lines[i].ToLower().Contains("£"))
+                        if (lines[i].ToLower().Contains("£"))
                         {
-
-                            System.Diagnostics.Debug.WriteLine("Found price list");
-
                             for (int j = 0; j < receipt.ProductLines.Count; j++) // loops through all read-in products
                             {
                                 if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
@@ -161,9 +129,10 @@ namespace IP3_Group4.Controllers
                     System.Diagnostics.Debug.WriteLine(receipt.PurchaseDate);
                     foreach (var item in receipt.ProductLines)
                     {
-                        System.Diagnostics.Debug.WriteLine($"{item.ItemName} ----- Q: {item.Quantity} ----- P: {item.Price} ----- T: {item.LineTotal}");
+                        System.Diagnostics.Debug.WriteLine($"{item.ItemName}     Quantity: {item.Quantity}     Price: £{item.Price}     Total: £{item.LineTotal}");
                     }
 
+                    ViewBag.Message = "File uploaded successfully!";
                     return View();
                 }
                 else
