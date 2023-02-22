@@ -6,7 +6,7 @@ using IP3_Group4.Models;
 
 namespace IP3_Group4.Data
 {
-    public class DBInit : DropCreateDatabaseAlways<DBContext>
+    public class DBInit : DropCreateDatabaseIfModelChanges<DBContext>
     {
         protected override void Seed(DBContext context)
         {

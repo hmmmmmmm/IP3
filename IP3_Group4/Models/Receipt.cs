@@ -23,6 +23,7 @@ namespace IP3_Group4.Models
         {
             this.Shop = Shop;
             this.PurchaseDate = PurchaseDate;
+            ProductLines = new List<ProductLine>();
         }
 
         public Receipt()
@@ -31,6 +32,7 @@ namespace IP3_Group4.Models
             this.Shop = "";
             this.TotalPrice = 0;
             this.PurchaseDate = DateTime.UtcNow;
+            ProductLines = new List<ProductLine>();
 
         }
 
@@ -66,6 +68,7 @@ namespace IP3_Group4.Models
         {
             this.ID = 0;
             this.Type = "";
+            Receipts = new List<Receipt>();
         }
 
         #region ProductLines Properties
