@@ -2,7 +2,7 @@
     ViewBag.Title = "Upload Receipt";
 }
 <h2>UploadFile</h2>
-@using (Html.BeginForm("UploadReceipt", "Vision", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div>
         @Html.TextBox("file", "", new { type = "file" }) <br />

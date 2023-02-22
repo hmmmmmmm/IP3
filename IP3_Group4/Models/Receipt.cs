@@ -34,7 +34,7 @@ namespace IP3_Group4.Models
 
         }
 
-        #region Creator Properties
+        #region PaymentType Properties
         [Display(Name = "Payment Type"), ForeignKey("PaymentType")]
         public int PaymentID { get; set; }
         public PaymentType PaymentType { get; set; }
@@ -44,7 +44,7 @@ namespace IP3_Group4.Models
         public List<ProductLine> ProductLines { get; set; }
         #endregion
 
-        #region Poster Properties
+        #region User Properties
         [Display(Name = "User"), ForeignKey("User")]
         public string UserID { get; set; }
         public User User { get; set; }
@@ -73,7 +73,6 @@ namespace IP3_Group4.Models
         #endregion
     }
 
-
     public class ProductLine
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -100,7 +99,7 @@ namespace IP3_Group4.Models
             this.Price = 0;
         }
 
-        #region Poster Properties
+        #region Receipt Properties
         [Display(Name = "Receipt"), ForeignKey("Receipt")]
         public int ReceiptID { get; set; }
         public Receipt Receipt { get; set; }
