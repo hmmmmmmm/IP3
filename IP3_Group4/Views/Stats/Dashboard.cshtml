@@ -5,5 +5,19 @@
 
 <h2>Dashboard</h2>
 
-Home page for logged in users
-They can get a quick overview of whats left in their budget, what theyve spent over X period of time, etc.
+<p>
+    Home page for logged in users
+    They can get a quick overview of whats left in their budget, what theyve spent over X period of time, etc.
+</p>
+
+@{
+    // Don't mind this. just mucking about with something that might be handy.
+    // see: https://learn.microsoft.com/en-us/aspnet/web-pages/overview/data/7-displaying-data-in-a-chart
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Chart Title")
+        .AddSeries(
+            name: "Employee",
+            xValue: new[] {  "Peter", "Andrew", "Julie", "Mary", "Dave" },
+            yValues: new[] { "2", "6", "4", "5", "3" })
+        .Write();
+}
