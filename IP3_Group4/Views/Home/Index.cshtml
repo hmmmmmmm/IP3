@@ -5,27 +5,104 @@
 <div class="jumbotron">
     <h1>ReceiptR</h1>
     <p class="lead">ReceiptR is a new way to track your spending in supermarkets, cinemas and more. Sign up below!</p>
-    <p><a href="/Account/Register" class="btn btn-primary btn-lg">Sign up &raquo;</a></p>
+    @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+<h2>Here's some ideas for colour schemes:</h2>
+<p>
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #454851; padding: 15px 5px 15px 5px;">#454851</td>
+            <td style="background-color: #73956F; padding: 10px 5px 10px 5px;">#73956F</td>
+            <td style="background-color: #7BAE7F; padding: 10px 5px 10px 5px;">#7BAE7F</td>
+            <td style="background-color: #95D7AE; padding: 10px 5px 10px 5px;">#95D7AE</td>
+            <td style="background-color: #FCEFF9; padding: 10px 5px 10px 5px;">#FCEFF9</td>
+        </tr>
+        <tr><a href="https://coolors.co/454851-73956f-7bae7f-95d7ae-fceff9">Sunbleached Celtic</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #002626; padding: 15px 5px 15px 5px; ">#002626</td>
+            <td style="background-color: #0E4749; padding: 10px 5px 10px 5px;">#0E4749</td>
+            <td style="background-color: #95C623; padding: 10px 5px 10px 5px;">#95C623</td>
+            <td style="background-color: #E55812; padding: 10px 5px 10px 5px;">#E55812</td>
+            <td style="background-color: #EFE7DA; padding: 10px 5px 10px 5px;">#EFE7DA</td>
+        </tr>
+        <tr><a href="https://coolors.co/002626-0E4749-95C623-E55812-EFE7DA">Bright and Breezy</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #272727; padding: 15px 5px 15px 5px; ">#272727</td>
+            <td style="background-color: #FED766; padding: 10px 5px 10px 5px;">#FED766</td>
+            <td style="background-color: #009FB7; padding: 10px 5px 10px 5px;">#009FB7</td>
+            <td style="background-color: #696773; padding: 10px 5px 10px 5px;">#696773</td>
+            <td style="background-color: #EFF1F3; padding: 10px 5px 10px 5px;">#EFF1F3</td>
+        </tr>
+        <tr><a href="https://coolors.co/272727-FED766-009FB7-696773-EFF1F3">Day at the Beach</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #08605F; padding: 15px 5px 15px 5px; ">#08605F</td>
+            <td style="background-color: #177E89; padding: 10px 5px 10px 5px; ">#177E89</td>
+            <td style="background-color: #598381; padding: 10px 5px 10px 5px; ">#598381</td>
+            <td style="background-color: #8E936D; padding: 10px 5px 10px 5px; ">#8E936D</td>
+            <td style="background-color: #A2AD59; padding: 10px 5px 10px 5px; ">#A2AD59</td>
+        </tr>
+        <tr><a href="https://coolors.co/08605F-177E89-598381-8E936D-A2AD59">Atlantis</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #0D1B2A; padding: 15px 5px 15px 5px; ">#0D1B2A</td>
+            <td style="background-color: #1B263B; padding: 10px 5px 10px 5px; ">#1B263B</td>
+            <td style="background-color: #415A77; padding: 10px 5px 10px 5px; ">#415A77</td>
+            <td style="background-color: #778DA9; padding: 10px 5px 10px 5px; ">#778DA9</td>
+            <td style="background-color: #E0E1DD; padding: 10px 5px 10px 5px; ">#E0E1DD</td>
+        </tr>
+        <tr><a href="https://coolors.co/0D1B2A-1B263B-415A77-778DA9-E0E1DD">Mother Prussia</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #50514F; padding: 15px 5px 15px 5px; ">#50514F</td>
+            <td style="background-color: #F25F5C; padding: 10px 5px 10px 5px; ">#F25F5C</td>
+            <td style="background-color: #FFE066; padding: 10px 5px 10px 5px; ">#FFE066</td>
+            <td style="background-color: #247BA0; padding: 10px 5px 10px 5px; ">#247BA0</td>
+            <td style="background-color: #70C1B3; padding: 10px 5px 10px 5px; ">#70C1B3</td>
+        </tr>
+        <tr><a href="https://coolors.co/50514F-F25F5C-FFE066-247BA0-70C1B3">Not Quite</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #1B264F; padding: 15px 5px 15px 5px; ">#1B264F</td>
+            <td style="background-color: #274690; padding: 10px 5px 10px 5px; ">#274690</td>
+            <td style="background-color: #576CA8; padding: 10px 5px 10px 5px; ">#576CA8</td>
+            <td style="background-color: #302B27; padding: 10px 5px 10px 5px; ">#302B27</td>
+            <td style="background-color: #F5F3F5; padding: 10px 5px 10px 5px; ">#F5F3F5</td>
+        </tr>
+        <tr><a href="https://coolors.co/1b264f-274690-576ca8-302b27-f5f3f5">After the Scrap</a></tr>
+    </table>
+
+    <br />
+    <table>
+        <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
+            <td style="background-color: #CDC392; padding: 15px 5px 15px 5px; ">#CDC392</td>
+            <td style="background-color: #E8E5DA; padding: 10px 5px 10px 5px; ">#E8E5DA</td>
+            <td style="background-color: #9EB7E5; padding: 10px 5px 10px 5px; ">#9EB7E5</td>
+            <td style="background-color: #648DE5; padding: 10px 5px 10px 5px; ">#648DE5</td>
+            <td style="background-color: #304C89; padding: 10px 5px 10px 5px; ">#304C89</td>
+        </tr>
+        <tr><a href="https://coolors.co/cdc392-e8e5da-9eb7e5-648de5-304c89">Into the Sea</a></tr>
+    </table>
+</p>
