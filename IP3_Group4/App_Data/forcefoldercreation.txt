@@ -1,0 +1,1 @@
+﻿This file only exists to force the creation of App_Data in new git pulls.
