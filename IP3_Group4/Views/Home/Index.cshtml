@@ -4,147 +4,38 @@
 
 <div class="jumbotron">
     <h1>ReceiptR</h1>
-    <p class="lead">ReceiptR is a new way to track your spending in supermarkets, cinemas and more. Sign up below!</p>
-    @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    <p class="lead">ReceiptR is a new way to track your spending in supermarkets, cinemas and more. @Html.ActionLink("Sign up here!", "Register", "Account")</p>
 </div>
 
+@if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    <p>@ViewBag.Message</p>
+                </div>
+            }
 
 <div class="row">
-    <div class="col-md-6">
-        <h2>Here's some ideas for colour schemes:</h2>
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <h2>How to use ReceiptR</h2>
         <p>
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #454851; padding: 15px 10px 15px 10px; ">#454851</td>
-                    <td style="background-color: #73956F; padding: 15px 10px 15px 10px;">#73956F</td>
-                    <td style="background-color: #7BAE7F; padding: 15px 10px 15px 10px;">#7BAE7F</td>
-                    <td style="background-color: #95D7AE; padding: 15px 10px 15px 10px;">#95D7AE</td>
-                    <td style="background-color: #FCEFF9; padding: 15px 10px 15px 10px;">#FCEFF9</td>
-                </tr>
-                <tr><a href="https://coolors.co/454851-73956f-7bae7f-95d7ae-fceff9">Sunbleached Celtic</a></tr>
-            </table>
+            Follow these simple steps to get started with ReceiptR today!
 
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #002626; padding: 15px 10px 15px 10px; ">#002626</td>
-                    <td style="background-color: #0E4749; padding: 15px 10px 15px 10px;">#0E4749</td>
-                    <td style="background-color: #95C623; padding: 15px 10px 15px 10px;">#95C623</td>
-                    <td style="background-color: #E55812; padding: 15px 10px 15px 10px;">#E55812</td>
-                    <td style="background-color: #EFE7DA; padding: 15px 10px 15px 10px;">#EFE7DA</td>
-                </tr>
-                <tr><a href="https://coolors.co/002626-0E4749-95C623-E55812-EFE7DA">Bright and Breezy</a></tr>
-            </table>
+            <ol>
+                <li>Create an account @Html.ActionLink("here", "Register", "Account")</li>
+                <li>Click "Upload Receipt"</li>
+                <li>Upload a receipt!</li>
+            </ol>
 
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #272727; padding: 15px 10px 15px 10px; ">#272727</td>
-                    <td style="background-color: #FED766; padding: 15px 10px 15px 10px;">#FED766</td>
-                    <td style="background-color: #009FB7; padding: 15px 10px 15px 10px;">#009FB7</td>
-                    <td style="background-color: #696773; padding: 15px 10px 15px 10px;">#696773</td>
-                    <td style="background-color: #EFF1F3; padding: 15px 10px 15px 10px;">#EFF1F3</td>
-                </tr>
-                <tr><a href="https://coolors.co/272727-FED766-009FB7-696773-EFF1F3">Day at the Beach</a></tr>
-            </table>
-
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #08605F; padding: 15px 10px 15px 10px; ">#08605F</td>
-                    <td style="background-color: #177E89; padding: 15px 10px 15px 10px; ">#177E89</td>
-                    <td style="background-color: #598381; padding: 15px 10px 15px 10px; ">#598381</td>
-                    <td style="background-color: #8E936D; padding: 15px 10px 15px 10px; ">#8E936D</td>
-                    <td style="background-color: #A2AD59; padding: 15px 10px 15px 10px; ">#A2AD59</td>
-                </tr>
-                <tr><a href="https://coolors.co/08605F-177E89-598381-8E936D-A2AD59">Atlantis</a></tr>
-            </table>
-
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #0D1B2A; padding: 15px 10px 15px 10px; ">#0D1B2A</td>
-                    <td style="background-color: #1B263B; padding: 15px 10px 15px 10px; ">#1B263B</td>
-                    <td style="background-color: #415A77; padding: 15px 10px 15px 10px; ">#415A77</td>
-                    <td style="background-color: #778DA9; padding: 15px 10px 15px 10px; ">#778DA9</td>
-                    <td style="background-color: #E0E1DD; padding: 15px 10px 15px 10px; ">#E0E1DD</td>
-                </tr>
-                <tr><a href="https://coolors.co/0D1B2A-1B263B-415A77-778DA9-E0E1DD">Mother Prussia</a></tr>
-            </table>
-
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #50514F; padding: 15px 10px 15px 10px; ">#50514F</td>
-                    <td style="background-color: #F25F5C; padding: 15px 10px 15px 10px; ">#F25F5C</td>
-                    <td style="background-color: #FFE066; padding: 15px 10px 15px 10px; ">#FFE066</td>
-                    <td style="background-color: #247BA0; padding: 15px 10px 15px 10px; ">#247BA0</td>
-                    <td style="background-color: #70C1B3; padding: 15px 10px 15px 10px; ">#70C1B3</td>
-                </tr>
-                <tr><a href="https://coolors.co/50514F-F25F5C-FFE066-247BA0-70C1B3">Not Quite</a></tr>
-            </table>
-
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #1B264F; padding: 15px 10px 15px 10px; ">#1B264F</td>
-                    <td style="background-color: #274690; padding: 15px 10px 15px 10px; ">#274690</td>
-                    <td style="background-color: #576CA8; padding: 15px 10px 15px 10px; ">#576CA8</td>
-                    <td style="background-color: #302B27; padding: 15px 10px 15px 10px; ">#302B27</td>
-                    <td style="background-color: #F5F3F5; padding: 15px 10px 15px 10px; ">#F5F3F5</td>
-                </tr>
-                <tr><a href="https://coolors.co/1b264f-274690-576ca8-302b27-f5f3f5">After the Scrap</a></tr>
-            </table>
-
-            <br />
-            <table>
-                <tr style="border-width: 10px; border-style: solid; border-color: #FFFFFF; color: black;">
-                    <td style="background-color: #CDC392; padding: 15px 10px 15px 10px; ">#CDC392</td>
-                    <td style="background-color: #E8E5DA; padding: 15px 10px 15px 10px; ">#E8E5DA</td>
-                    <td style="background-color: #9EB7E5; padding: 15px 10px 15px 10px; ">#9EB7E5</td>
-                    <td style="background-color: #648DE5; padding: 15px 10px 15px 10px; ">#648DE5</td>
-                    <td style="background-color: #304C89; padding: 15px 10px 15px 10px; ">#304C89</td>
-                </tr>
-                <tr><a href="https://coolors.co/cdc392-e8e5da-9eb7e5-648de5-304c89">Into the Sea</a></tr>
-            </table>
+            You can view all the information from your scanned receipts via the @Html.ActionLink("dashboard", "Dashboard", "Stats").
         </p>
     </div>
-    <div class="col-md-6">
 
-        <h2>To-Do List</h2>
-        <p>
-            All the stuff we still need to do:
-            <ul>
-                <li>Pick a colour scheme</li>
-                <li>Create a logo</li>
-                <li>Implement front-end based off wireframes</li>
-                <li>Implement controllers</li>
-                <li>Implement data analysis (stored in DB or analysed at runtime?)</li>
-            </ul>
-        </p>
-
-        <br />
-
-        <h2>Data Analysis Ideas</h2>
-        <p>
-            Just some ideas for the types of data we can analyse:
-
-            <ul>
-                <li>Most bought product</li>
-                <li>Most shopped at shop</li>
-                <li>Total amount spent over week / month /  3 months / etc.</li>
-            </ul>
-        </p>
-
-        <br />
-
-        <h2>Other Feature Ideas</h2>
-        <p>
-            Just some other ideas for features (either for the project or afterwards):
-            <ul>
-                <li>Customising item names (cos they look bad on receipts)</li>
-            </ul>
-        </p>
+    <div class="col-md-5">
+        <h2>About ReceiptR</h2>
+        <p>ReceiptR is your handy app for tracking your spending at supermarkets, cinemas, and so many more places! Use the instructions to the left to help you get started. Just scan a receipt, and we'll figure out the rest!</p>
+        <p>By using Optical Character Recognition technology, we track the items you buy just by scanning your receipts. From there, we can help you to cut your spending!</p>
     </div>
+
+    <div class="col-md-1"></div>
 </div>
-

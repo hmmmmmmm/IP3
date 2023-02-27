@@ -1,25 +1,59 @@
-﻿
+﻿@using IP3_Group4.Models;
+@model Analytics
 @{
     ViewBag.Title = "Dashboard";
 }
 
 <h2>Dashboard</h2>
 
-<p>
-    Home page for logged in users
-    They can get a quick overview of whats left in their budget, what theyve spent over X period of time, etc.
-</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>All your ReceiptR information on one page.</p>
+    <hr />
 
-<p>
-    @{
-        // Don't mind this. just mucking about with something that might be handy.
-        // see: https://learn.microsoft.com/en-us/aspnet/web-pages/overview/data/7-displaying-data-in-a-chart
-        var myChart = new Chart(width: 600, height: 400)
-            .AddTitle("Chart Title")
-            .AddSeries(
-                name: "Employee",
-                xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-                yValues: new[] { "2", "6", "4", "5", "3" })
-            .Write();
-    }
-</p>
+    <div class="row">
+        <div class="col-md-1"></div>
+
+        <div class="col-md-4 dashboard-section">
+            <h4>This week, you spent:</h4>
+            <h1>£@Model.WeekTotal</h1>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-4 dashboard-section">
+            <h4>This month, you spent:</h4>
+            <h1>£@Model.MonthTotal</h1>
+        </div>
+
+        <div class="col-md-1"></div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-1"></div>
+
+        <div class="col-md-4 dashboard-section">
+            <h4>Your favourite shop:</h4>
+            <h1>@Model.Shops[0].Shop</h1>
+            <h4>with @Model.Shops[0].Visits visits.</h4>
+        </div>
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-4 dashboard-section">
+            <h4>This month, you spent:</h4>
+            <h1>£@Model.MonthTotal</h1>
+        </div>
+
+        <div class="col-md-1"></div>
+    </div>
+
+}
+else
+{
+<div class="alert alert-danger">
+    <p>You must be logged in to view this page.</p>
+</div>
+    
+}
+

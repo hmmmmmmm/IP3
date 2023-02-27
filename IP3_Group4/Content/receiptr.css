@@ -1,0 +1,34 @@
+﻿body {
+    background-color: #415A77;
+}
+
+.navbar {
+    background-color: #0D1B2A;
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
+    color: #E0E1DD;
+}
+
+.jumbotron {
+    background-color: #caccc6;
+}
+
+.body-content {
+    background-color: #E0E1DD;
+}
+
+.body-content row p, .body-content row li {
+    font-size: 12pt;
+}
+
+.dashboard-section {
+    border-color: #1B263B;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 10px;
+
+    padding: 5px;
+
+    text-align: center;
+}

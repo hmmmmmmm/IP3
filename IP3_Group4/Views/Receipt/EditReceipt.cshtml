@@ -1,9 +1,69 @@
-﻿
+﻿@using IP3_Group4.Models;
+@model Receipt
+
 @{
     ViewBag.Title = "Edit Receipt";
 }
 
 <h2>Edit Receipt</h2>
 
-forms and stuff go here
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Message
+    </div>
+}
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Create a new account.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Shop, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Shop, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.TotalPrice, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            £@Html.TextBoxFor(m => m.TotalPrice, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PurchaseDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.PurchaseDate, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <table class="prod-lines">
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price per Item</th>
+            <th>Total</th>
+        </tr>
+
+        @for (int i = 0; i < Model.ProductLines.Count; i++)
+        {
+            <tr>
+                <td>@Html.TextBoxFor(m => m.ProductLines[i].ItemName, new { @class = "form-control" })</td>
+                <td>@Html.TextBoxFor(m => m.ProductLines[i].Quantity, new { @class = "form-control" })</td>
+                <td>@Html.TextBoxFor(m => m.ProductLines[i].Price, new { @class = "form-control" })</td>
+                <td>£@Model.ProductLines[i].LineTotal</td>
+            </tr>
+        }
+    </table>
+    
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Register" />
+        </div>
+    </div>
+}
 

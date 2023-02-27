@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using IP3_Group4.Data;
 using System.Web.Caching;
+using Microsoft.Ajax.Utilities;
 
 namespace IP3_Group4.Controllers
 {
@@ -31,6 +32,8 @@ namespace IP3_Group4.Controllers
             {
                 if (file != null) // checks a file was uploaded
                 {
+                    
+
                     string filePath = Server.MapPath(Url.Content("~/ReceiptR-key.json")); // sets location of the credentials key
 
                     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", filePath); // sets credentials key to retrieved path
@@ -147,38 +150,26 @@ namespace IP3_Group4.Controllers
                         }
                     }
 
-                    System.Diagnostics.Debug.WriteLine("----------------------------------");
-                    System.Diagnostics.Debug.WriteLine(receipt.PurchaseDate);
-                    foreach (var item in receipt.ProductLines)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"{item.ItemName}     Quantity: {item.Quantity}     Price: £{item.Price}     Total: £{item.LineTotal}");
-                    }
-
-                    ViewBag.Message = "File uploaded successfully!";
+                    ViewBag.Successful = "y";
                     return View();
                 }
                 else
                 {
-                    throw new Exception("something went wrong with file upload");
+                    throw new Exception("no file upload detected");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error in " + ex.Source + ": " + ex.Message);
-                ViewBag.Message = "File upload failed!!";
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
+                ViewBag.Successful = "n";
                 return View();
             }
-        }
-
-        public ActionResult EditReceipt()
-        {
-            return View();
         }
 
         [HttpPost]
         public ActionResult EditReceipt(Receipt receipt)
         {
-            return View();
+            return View(receipt);
         }
 
         public ActionResult Overview()

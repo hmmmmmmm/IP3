@@ -79,6 +79,7 @@ namespace IP3_Group4.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    ViewBag.Message = "Welcome back, " + User.Identity.Name;
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -163,6 +164,7 @@ namespace IP3_Group4.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    ViewBag.Message = "Welcome to ReceiptR, " + User.Identity.Name;
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);

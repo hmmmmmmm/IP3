@@ -1,12 +1,20 @@
 ﻿@{
     ViewBag.Title = "Upload Receipt";
 }
-<h2>UploadFile</h2>
+<h2>Upload Receipt</h2>
 @using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    if (ViewBag.Successful == "y")
+    {
+        <div class="alert alert-success">Receipt uploaded successfully!</div>
+    }
+    else if (ViewBag.Successful == "n")
+    {
+        <div class="alert alert-danger">Receipt upload failed.</div>
+    }
+
     <div>
-        @Html.TextBox("file", "", new { type = "file" }) <br />
+        @Html.TextBox("file", "", new { type = "file", id = "filename" }) <br />
         <input type="submit" value="Upload" />
-        @ViewBag.Message
     </div>
 }
