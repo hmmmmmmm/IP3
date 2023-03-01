@@ -15,7 +15,7 @@ namespace IP3_Group4.Models
         public Analytics(List<Receipt> receipts)
         {
 
-            if (receipts != null)
+            if (receipts.Any())
             {
                 LastReceipt = receipts.Last();
                 DateTime weekStart = DateTime.Now.AddDays(-7); // gets date of 7 days ago
@@ -43,7 +43,15 @@ namespace IP3_Group4.Models
                 }
 
                 Shops = shops.OrderBy(s => s.Visits).ToList();
-            }    
+            }
+            else
+            {
+                Shops = new List<ShopCounter>
+                {
+                    new ShopCounter("No shops yet", 0)
+                };
+                MonthTotal = 0; WeekTotal = 0;
+            }
         }
     }
 
@@ -56,6 +64,12 @@ namespace IP3_Group4.Models
         {
             Shop = shop;
             Visits = 1;
+        }
+
+        public ShopCounter(string shop, int visits)
+        {
+            Shop = shop;
+            Visits = visits;
         }
     }
 }
