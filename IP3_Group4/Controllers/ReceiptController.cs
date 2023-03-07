@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using IP3_Group4.Data;
 using System.Web.Caching;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity;
 
 namespace IP3_Group4.Controllers
 {
@@ -104,27 +105,27 @@ namespace IP3_Group4.Controllers
                                 continue;
                             }
 
-                            // checks if next line is the payment method
-                            if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
-                            {
-                                i++;
+                            //// checks if next line is the payment method
+                            //if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
+                            //{
+                            //    i++;
 
-                                if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
-                                {
-                                    receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
+                            //    if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
+                            //    {
+                            //        receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
 
-                                }
-                                else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
-                                {
-                                    receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
-                                }
-                                else // if payment type is neither, deals with it
-                                {
-                                    throw new Exception("PaymentType Not Found");
-                                }
+                            //    }
+                            //    else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
+                            //    {
+                            //        receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
+                            //    }
+                            //    else // if payment type is neither, deals with it
+                            //    {
+                            //        throw new Exception("PaymentType Not Found");
+                            //    }
 
-                                continue;
-                            }
+                            //    continue;
+                            //}
 
                             // checks if next line is the Date/Time of purchase
                             if (template.DateTimePrompt != "" && lines[i].ToLower().Contains(template.DateTimePrompt))
@@ -149,6 +150,12 @@ namespace IP3_Group4.Controllers
                             }
                         }
                     }
+
+                    receipt.UserID = User.Identity.GetUserId();
+
+                    db.Receipts.Add(receipt);
+                    db.SaveChanges();
+
 
                     ViewBag.Successful = "y";
                     return View();

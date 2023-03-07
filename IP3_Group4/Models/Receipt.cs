@@ -38,12 +38,12 @@ namespace IP3_Group4.Models
 
         }
 
-        #region PaymentType Properties
-        // Used to store the PaymentType of the receipt.
-        [Display(Name = "Payment Type"), ForeignKey("PaymentType")]
-        public int PaymentID { get; set; } // PaymentType ID
-        public PaymentType PaymentType { get; set; } // Actual payment type (cash, card)
-        #endregion
+        //#region PaymentType Properties
+        //// Used to store the PaymentType of the receipt.
+        //[Display(Name = "Payment Type"), ForeignKey("PaymentType")]
+        //public int PaymentID { get; set; } // PaymentType ID
+        //public PaymentType PaymentType { get; set; } // Actual payment type (cash, card)
+        //#endregion
 
         #region ProductLines Properties
         // List of products found on the receipt
