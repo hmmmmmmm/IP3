@@ -9,7 +9,8 @@ namespace IP3_Group4.Models
     {
         public decimal WeekTotal { get; set; } // Total spent by user over one week
         public decimal MonthTotal { get; set; } // Total spent by user over one month
-        public List<ShopCounter> Shops { get; set; } // Stores the shop the user shopped at the most
+        public List<ShopCounter> Shops { get; set; } // Stores the shops the shops the user has shopped at
+        public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
         public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
 
         public Analytics(List<Receipt> receipts)
@@ -20,7 +21,10 @@ namespace IP3_Group4.Models
                 LastReceipt = receipts.Last();
                 DateTime weekStart = DateTime.Now.AddDays(-7); // gets date of 7 days ago
                 DateTime monthStart = DateTime.Now.AddDays(-30); // gets date of 30 days ago
+
                 List<ShopCounter> shops = new List<ShopCounter>(); // creates list to be used to store different shops and how many visits
+                List<ProductCounter> products = new List<ProductCounter>();
+
                 foreach (Receipt r in receipts) // loops through all receipts
                 {
                     if (r.PurchaseDate >= monthStart)
@@ -40,21 +44,34 @@ namespace IP3_Group4.Models
                     {
                         shops.Add(new ShopCounter(r.Shop));
                     }
+
+                    foreach (ProductLine pl in r.ProductLines)
+                    {
+                        int pIndex = products.FindIndex(p => p.Product == pl.ItemName);
+                        if (pIndex >= 0)
+                        {
+                            products[pIndex].Buys += pl.Quantity;
+                        }
+                        else
+                        {
+                            products.Add(new ProductCounter(pl.ItemName));
+                        }
+                    }
                 }
 
                 Shops = shops.OrderBy(s => s.Visits).ToList();
+                Products = products.OrderBy(p => p.Buys).ToList();
             }
             else
             {
-                Shops = new List<ShopCounter>
-                {
-                    new ShopCounter("No shops yet", 0)
-                };
+                Shops = new List<ShopCounter> { new ShopCounter("No shops visited yet...") };
+                Products = new List<ProductCounter> { new ProductCounter("No products bought yet...") };
                 MonthTotal = 0; WeekTotal = 0;
             }
         }
     }
 
+    // counts total visits to a shop
     public class ShopCounter
     {
         public string Shop { get; set; }
@@ -70,6 +87,25 @@ namespace IP3_Group4.Models
         {
             Shop = shop;
             Visits = visits;
+        }
+    }
+
+    // counts total number of a product bought
+    public class ProductCounter
+    {
+        public string Product { get; set; }
+        public int Buys { get; set; }
+
+        public ProductCounter(string product)
+        {
+            Product = product;
+            Buys = 1;
+        }
+
+        public ProductCounter(string product, int buys)
+        {
+            Product = product;
+            Buys = buys;
         }
     }
 }

@@ -14,14 +14,34 @@ namespace IP3_Group4.Controllers
     public class StatsController : Controller
     {
         // Handles Views relating to users viewing data that has been processed. Basically the hub for most of the stuff.
-        public Analytics analytics { get; set; }
-        private DBContext dbContext { get; set; }
+        private Analytics analytics;
+        private DBContext dbContext = new DBContext();
 
         // GET: Stats
         public ActionResult Dashboard()
         {
             dbContext = new DBContext(); // initialise DBContext
 
+            analytics = new Analytics(GetUsersReceipts()); // initialise analytics class to pass to views
+
+            return View(analytics);
+        }
+
+        public ActionResult Spending()
+        {
+            //Assign Analytics here
+            ViewBag.Analytics = new Analytics(GetUsersReceipts());
+
+            return View();
+        }
+
+        public ActionResult Budget()
+        {
+            return View();
+        }
+
+        private List<Receipt> GetUsersReceipts()
+        {
             // gets all receipts belonging to this user
             List<Receipt> receipts = new List<Receipt>();
             receipts = dbContext.Receipts.ToList();
@@ -31,19 +51,7 @@ namespace IP3_Group4.Controllers
                     receipts.Remove(receipts[i]);
             }
 
-            analytics = new Analytics(receipts); // initialise analytics class to pass to views
-
-            return View(analytics);
-        }
-
-        public ActionResult Spending()
-        {
-            return View();
-        }
-
-        public ActionResult Budget()
-        {
-            return View();
+            return receipts;
         }
     }
 }

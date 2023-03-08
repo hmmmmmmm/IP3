@@ -8,45 +8,48 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <p>All your ReceiptR information on one page.</p>
-    <hr />
+<p>All your ReceiptR information on one page.</p>
+<hr />
 
-    <div class="row">
-        <div class="col-md-1"></div>
+<div class="row">
+    <div class="col-md-1"></div>
 
-        <div class="col-md-4 dashboard-section">
-            <h4>This week, you spent:</h4>
-            <h1>£@Model.WeekTotal</h1>
-        </div>
-
-        <div class="col-md-2"></div>
-
-        <div class="col-md-4 dashboard-section">
-            <h4>This month, you spent:</h4>
-            <h1>£@Model.MonthTotal</h1>
-        </div>
-
-        <div class="col-md-1"></div>
+    <div class="col-md-4 dashboard-section">
+        <h4>This week, you spent:</h4>
+        <h1>£@Model.WeekTotal</h1>
     </div>
-    
-    <div class="row">
-        <div class="col-md-1"></div>
 
-        <div class="col-md-4 dashboard-section">
-            <h4>Your favourite shop:</h4>
-            <h1>@Model.Shops[0].Shop</h1>
-            <h4>with @Model.Shops[0].Visits visits.</h4>
-        </div>
+    <div class="col-md-2"></div>
 
-        <div class="col-md-2"></div>
-
-        <div class="col-md-4 dashboard-section">
-            <h4>This month, you spent:</h4>
-            <h1>£@Model.MonthTotal</h1>
-        </div>
-
-        <div class="col-md-1"></div>
+    <div class="col-md-4 dashboard-section">
+        <h4>This month, you spent:</h4>
+        <h1>£@Model.MonthTotal</h1>
     </div>
+
+    <div class="col-md-1"></div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-1"></div>
+
+    <div class="col-md-4 dashboard-section">
+        <h4>Your favourite shop:</h4>
+        <h1>@Model.Shops[0].Shop</h1>
+        <h4>with @Model.Shops[0].Visits visits.</h4>
+    </div>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-4 dashboard-section">
+        <!-- Section is link to Spending page -->
+        <h4>Your most bought product is:</h4>
+        <h1>put product here</h1>
+    </div>
+
+    <div class="col-md-1"></div>
+</div>
 
 }
 else
@@ -54,6 +57,6 @@ else
 <div class="alert alert-danger">
     <p>You must be logged in to view this page.</p>
 </div>
-    
+
 }
 

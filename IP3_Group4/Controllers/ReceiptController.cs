@@ -60,12 +60,14 @@ namespace IP3_Group4.Controllers
                     if (lines.Contains("B&M Retail Ltd"))
                     {
                         template = db.ReceiptTemplates.First(rt => rt.Shop == "b&m retail ltd");
+                        receipt.Shop = "B&M Retail Ltd"; // sets name of the shop bought from
                     } else if (lines.Contains("Sainsbury's Supermarkets Ltd"))
                     {
                         template = db.ReceiptTemplates.First(rt => rt.Shop == "sainsbury's supermarkets ltd");
+                        receipt.Shop = "Sainsbury's Supermarkets Ltd"; // sets name of the shop bought from
                     } else
                     {
-                        throw new Exception("No template found");
+                        throw new Exception("No attributed template");
                     }
 
                     if (template != null)
@@ -77,7 +79,7 @@ namespace IP3_Group4.Controllers
                             if (!hasProds && lines[i].ToLower().Contains(template.ProductStartPrompt))
                             {
 
-                                receipt.Shop = template.Shop; // sets name of the shop bought from
+                                
                                 hasProds = true; // tells app it has found the list of products
 
 
@@ -99,6 +101,7 @@ namespace IP3_Group4.Controllers
                                     }
 
                                     receipt.ProductLines.Add(pl); // adds ProductLine to receipt object
+                                    
 
                                 } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
 
@@ -142,6 +145,7 @@ namespace IP3_Group4.Controllers
                                     if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
                                     {
                                         receipt.ProductLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value
+                                        receipt.TotalPrice += receipt.ProductLines[j].LineTotal;
                                     }
 
                                     i++; // goes to next scanner line to avoid repetition
@@ -149,12 +153,17 @@ namespace IP3_Group4.Controllers
                                 break; // once prices are read, we dont need anymore info
                             }
                         }
+
+                        receipt.UserID = User.Identity.GetUserId();
+
+                        db.Receipts.Add(receipt);
+                        db.SaveChanges();
+
+                    } else
+                    {
+                        throw new Exception("No receipt template");
                     }
 
-                    receipt.UserID = User.Identity.GetUserId();
-
-                    db.Receipts.Add(receipt);
-                    db.SaveChanges();
 
 
                     ViewBag.Successful = "y";
@@ -181,7 +190,17 @@ namespace IP3_Group4.Controllers
 
         public ActionResult Overview()
         {
-            return View();
+            List<Receipt> receipts = db.Receipts.Include(r => r.ProductLines).OrderByDescending(r => r.PurchaseDate).ToList();
+
+            if (receipts.Any())
+            {
+                receipts.RemoveAll(r => r.UserID != User.Identity.GetUserId());
+            } else
+            {
+                ViewBag.Message = "No receipts uploaded yet...";
+            }            
+
+            return View(receipts);
         }
     }
 }
