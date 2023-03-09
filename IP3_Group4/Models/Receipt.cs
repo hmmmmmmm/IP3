@@ -19,6 +19,18 @@ namespace IP3_Group4.Models
         [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}"), Required]
         public DateTime PurchaseDate { get; set; } // Date and Time of purchase
 
+
+        // for seeding database
+        public Receipt(string shop, DateTime purchaseDate, List<ProductLine> productLines, string userID)
+        {
+            Shop = shop;
+            PurchaseDate = purchaseDate;
+            ProductLines = productLines;
+            UserID = userID;
+
+            CalculateTotal();
+        }
+
         // Standard constructor
         public Receipt(string Shop, DateTime PurchaseDate)
         {
@@ -36,6 +48,12 @@ namespace IP3_Group4.Models
             this.PurchaseDate = DateTime.UtcNow;
             ProductLines = new List<ProductLine>();
 
+        }
+
+        public void CalculateTotal()
+        {
+            foreach (ProductLine pl in ProductLines)
+                TotalPrice += pl.LineTotal;
         }
 
         //#region PaymentType Properties

@@ -5,6 +5,8 @@ using System.Web;
 
 namespace IP3_Group4.Models
 {
+
+    // ViewModel for dashboard
     public class Analytics
     {
         public decimal WeekTotal { get; set; } // Total spent by user over one week
@@ -12,6 +14,7 @@ namespace IP3_Group4.Models
         public List<ShopCounter> Shops { get; set; } // Stores the shops the shops the user has shopped at
         public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
         public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
+        public decimal RemainingBudget { get; set; }
 
         public Analytics(List<Receipt> receipts)
         {
