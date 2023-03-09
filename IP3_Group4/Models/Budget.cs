@@ -27,6 +27,9 @@ namespace IP3_Group4.Models
             ResetDay = resetDay;
         }
 
-        public Budget() { }
+        public Budget() {
+            Amount = 0;
+            ResetDay = 1;
+        }
     }
 }
