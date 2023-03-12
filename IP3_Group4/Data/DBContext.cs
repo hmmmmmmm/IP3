@@ -19,6 +19,8 @@ namespace IP3_Group4.Data
 
         public DbSet<ReceiptTemplate> ReceiptTemplates { get; set; }
 
+        public DbSet<Budget> Budgets { get; set; }
+
         public DBContext()
             : base("ReceiptBudgetApp", throwIfV1Schema: false)
         {

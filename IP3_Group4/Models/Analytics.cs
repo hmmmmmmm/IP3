@@ -14,9 +14,11 @@ namespace IP3_Group4.Models
         public List<ShopCounter> Shops { get; set; } // Stores the shops the shops the user has shopped at
         public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
         public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
+
         public decimal RemainingBudget { get; set; }
 
-        public Analytics(List<Receipt> receipts)
+
+        public Analytics(List<Receipt> receipts, Budget budge)
         {
 
             if (receipts.Any())
@@ -27,6 +29,9 @@ namespace IP3_Group4.Models
 
                 List<ShopCounter> shops = new List<ShopCounter>(); // creates list to be used to store different shops and how many visits
                 List<ProductCounter> products = new List<ProductCounter>();
+                int totalProds = 0;
+
+                RemainingBudget = budge.Amount;
 
                 foreach (Receipt r in receipts) // loops through all receipts
                 {
@@ -37,6 +42,10 @@ namespace IP3_Group4.Models
                         if (r.PurchaseDate >= weekStart)
                             WeekTotal += r.TotalPrice;
                     }
+
+                    if (budge != null && r.PurchaseDate >= budge.LastReset)
+                        RemainingBudget -= r.TotalPrice;
+                    
 
                     int sIndex = shops.FindIndex(s => s.Shop == r.Shop);
                     if (sIndex >= 0)
@@ -59,11 +68,20 @@ namespace IP3_Group4.Models
                         {
                             products.Add(new ProductCounter(pl.ItemName));
                         }
+
+                        totalProds += pl.Quantity;
                     }
                 }
 
                 Shops = shops.OrderBy(s => s.Visits).ToList();
                 Products = products.OrderBy(p => p.Buys).ToList();
+
+                if (totalProds != 0)
+                {
+                    foreach (ProductCounter pc in products)
+                        pc.GetPercentOfBought(totalProds);
+                }
+                
             }
             else
             {
@@ -98,6 +116,7 @@ namespace IP3_Group4.Models
     {
         public string Product { get; set; }
         public int Buys { get; set; }
+        public double PercentageOfItemsBought { get; set; }
 
         public ProductCounter(string product)
         {
@@ -109,6 +128,10 @@ namespace IP3_Group4.Models
         {
             Product = product;
             Buys = buys;
+        }
+        public void GetPercentOfBought(int totalProds)
+        {
+            PercentageOfItemsBought = Math.Round((double) Buys / totalProds, 2);
         }
     }
 }

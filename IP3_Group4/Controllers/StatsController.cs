@@ -3,10 +3,7 @@ using IP3_Group4.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Web;
-using System.Web.Http.Hosting;
 using System.Web.Mvc;
 
 namespace IP3_Group4.Controllers
@@ -17,12 +14,10 @@ namespace IP3_Group4.Controllers
         private Analytics analytics;
         private DBContext dbContext = new DBContext();
 
-        // GET: Stats
         public ActionResult Dashboard()
         {
-            dbContext = new DBContext(); // initialise DBContext
-
-            analytics = new Analytics(GetUsersReceipts()); // initialise analytics class to pass to views
+            
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
 
             return View(analytics);
         }
@@ -30,14 +25,47 @@ namespace IP3_Group4.Controllers
         public ActionResult Spending()
         {
             //Assign Analytics here
-            ViewBag.Analytics = new Analytics(GetUsersReceipts());
+            ViewBag.Analytics = new Analytics(GetUsersReceipts(), GetUsersBudget());
 
             return View();
         }
 
         public ActionResult Budget()
         {
-            return View();
+            Budget budge = dbContext.Budgets.First(b => b.UserID == User.Identity.GetUserId());
+            if (budge != null)
+            {
+                return View(budge);
+            } else
+            {
+                ViewBag.Message = "You can set up a budget on this page!";
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Budget(Budget budge)
+        {
+            if (budge != null && budge.Amount != 0)
+            {
+                budge.UserID = User.Identity.GetUserId();
+                budge.LastReset = DateTime.Now;
+                budge.NextReset = DateTime.Now.AddDays(30);
+
+                dbContext.Budgets.Add(budge);
+                dbContext.SaveChangesAsync();
+
+                ViewBag.Message = "Budget set successfully!";
+                return View(budge);
+            } else if (budge != null)
+            {
+                ViewBag.Message = "Budgets must be at least £0.01!";
+                return View();
+            } else
+            {
+                ViewBag.Message = "Failed to set budget!";
+                return View();
+            }
         }
 
         private List<Receipt> GetUsersReceipts()
@@ -52,6 +80,11 @@ namespace IP3_Group4.Controllers
             }
 
             return receipts;
+        }
+
+        private Budget GetUsersBudget()
+        {
+            return dbContext.Budgets.First(b => b.UserID == User.Identity.GetUserId());        
         }
     }
 }
