@@ -74,9 +74,7 @@ namespace IP3_Group4.Controllers
                         {
                             // checks if scanner has reached the start of the products list
                             if (!hasProds && lines[i].ToLower().Contains(template.ProductStartPrompt))
-                            {
-
-                                
+                            {                                
                                 hasProds = true; // tells app it has found the list of products
 
 

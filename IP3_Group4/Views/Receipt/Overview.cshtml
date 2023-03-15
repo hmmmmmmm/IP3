@@ -1,48 +1,44 @@
-﻿@using IP3_Group4.Models;
-@model List<Receipt>
+﻿@model IEnumerable<IP3_Group4.Models.Receipt>
+    @using IP3_Group4.Data
 
-
-<h2>Overview</h2>
-
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-warning">
-        @ViewBag.Message
-    </div>
-}
-
-
-
-<div class="form-group">
-    @Html.LabelFor(m => m.Shop, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(m => m.Shop, new { @class = "form-control" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.PurchaseDate, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(m => m.PurchaseDate, new { @class = "form-control" })
-    </div>
-</div>
-
-<div class="form-group">
-    @Html.LabelFor(m => m.TotalPrice, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(m => m.TotalPrice, new { @class = "form-control" })
-    </div>
-</div>
-
-<table class = "prod-lines">
-    <tr>
-        <th></th>
-        <th></th>
-    </tr>
-
-    @for (int i = 0; i < Model.Receipts.Count; i++)
-    {
-       
+    @{
+    ViewBag.Title = "Overview";
     }
 
-</table>
+    <h2>Overview</h2>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Shop)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseDate)
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shop)
+            </td>
+            <td>
+                £@Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            </td>
+        </tr>
+}
+
+    </table>

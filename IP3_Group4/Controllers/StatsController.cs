@@ -17,7 +17,7 @@ namespace IP3_Group4.Controllers
         public ActionResult Dashboard()
         {
             
-            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget(User.Identity.GetUserId())); // initialise analytics class to pass to views
 
             return View(analytics);
         }
@@ -25,7 +25,7 @@ namespace IP3_Group4.Controllers
         public ActionResult Spending()
         {
             //Assign Analytics here
-            ViewBag.Analytics = new Analytics(GetUsersReceipts(), GetUsersBudget());
+            ViewBag.Analytics = new Analytics(GetUsersReceipts(), GetUsersBudget(User.Identity.GetUserId()));
 
             return View();
         }
@@ -70,21 +70,25 @@ namespace IP3_Group4.Controllers
 
         private List<Receipt> GetUsersReceipts()
         {
+            string id = User.Identity.GetUserId();
             // gets all receipts belonging to this user
-            List<Receipt> receipts = new List<Receipt>();
-            receipts = dbContext.Receipts.ToList();
-            for (int i = 0; i < receipts.Count; i++)
-            {
-                if (receipts[i].UserID != User.Identity.GetUserId())
-                    receipts.Remove(receipts[i]);
-            }
+            List<Receipt> receipts = dbContext.Receipts.Where(r => r.UserID == id).ToList();
+
+            //for (int i = 0; i <= receipts.Count; i++)
+            //{
+            //    if (receipts[i].UserID != User.Identity.GetUserId())
+            //        receipts.Remove(receipts[i]);
+            //}
 
             return receipts;
         }
 
-        private Budget GetUsersBudget()
+        private Budget GetUsersBudget(string userId)
         {
-            return dbContext.Budgets.First(b => b.UserID == User.Identity.GetUserId());        
+            if (dbContext.Budgets.Count() > 0)
+                return dbContext.Budgets.First(b => b.UserID == userId);
+            else
+                return null;
         }
     }
 }

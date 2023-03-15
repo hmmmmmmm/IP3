@@ -9,12 +9,11 @@ namespace IP3_Group4.Models
     // ViewModel for dashboard
     public class Analytics
     {
-        public decimal WeekTotal { get; set; } // Total spent by user over one week
+        public decimal WeekTotal { get; set; }  // Total spent by user over one week
         public decimal MonthTotal { get; set; } // Total spent by user over one month
         public List<ShopCounter> Shops { get; set; } // Stores the shops the shops the user has shopped at
         public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
         public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
-
         public decimal RemainingBudget { get; set; }
 
 
@@ -31,7 +30,8 @@ namespace IP3_Group4.Models
                 List<ProductCounter> products = new List<ProductCounter>();
                 int totalProds = 0;
 
-                RemainingBudget = budge.Amount;
+                if (budge != null)
+                    RemainingBudget = budge.Amount;
 
                 foreach (Receipt r in receipts) // loops through all receipts
                 {
@@ -81,7 +81,7 @@ namespace IP3_Group4.Models
                     foreach (ProductCounter pc in products)
                         pc.GetPercentOfBought(totalProds);
                 }
-                
+                //if ()
             }
             else
             {
@@ -97,6 +97,12 @@ namespace IP3_Group4.Models
     {
         public string Shop { get; set; }
         public int Visits { get; set; }
+
+        public ShopCounter()
+        {
+            Shop = "No shops visited...";
+            Visits = 0;
+        }
 
         public ShopCounter(string shop)
         {
