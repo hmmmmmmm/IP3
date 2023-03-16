@@ -55,46 +55,15 @@ namespace IP3_Group4.Data
                 Receipt r2 = new Receipt(
                     "Sainsbury's Supermarkets Ltd",
                     DateTime.Now,
-                    new List<ProductLine>
-                    {
-                        new ProductLine()
-                        {
-                            ItemName = "Cheese Slices",
-                            Quantity = 1,
-                            Price = (decimal) 1.50,
-                            Brand = "Sainsbury's"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Fresh Roll",
-                            Quantity = 6,
-                            Price = (decimal) 0.50,
-                            Brand = "Sainsbury's"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Ketchup",
-                            Quantity = 1,
-                            Price = (decimal) 1.00,
-                            Brand = "Heinz"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "2pt Milk",
-                            Quantity = 1,
-                            Price = (decimal) 2.00,
-                            Brand = "Sainsbury's"
-                        },
-            },
+                    new List<ProductLine>(),
                     testUserID
                 );
 
                 context.Receipts.Add(r1);
-                context.Receipts.Add(r2);
                 context.SaveChanges();
 
                 r1 = context.Receipts.ToList().Last(r => r.UserID == r1.UserID);
-                List<ProductLine> pls1 = new List<ProductLine>
+                List<ProductLine> productLines1 = new List<ProductLine>
                     {
                         new ProductLine()
                         {
@@ -137,11 +106,14 @@ namespace IP3_Group4.Data
                             ReceiptID = r1.ID
                         }
                     };
-                foreach (ProductLine pl in pls1)
+                foreach (ProductLine pl in productLines1)
                     context.ProductLine.Add(pl);
 
+                context.Receipts.Add(r2);
+                context.SaveChanges();
+
                 r2 = context.Receipts.ToList().Last(r => r.UserID == r2.UserID);
-                List<ProductLine> pls2 = new List<ProductLine>
+                List<ProductLine> productLines2 = new List<ProductLine>
                     {
                         new ProductLine()
                         {
@@ -176,8 +148,10 @@ namespace IP3_Group4.Data
                             ReceiptID = r2.ID
                         }
                     };
-                foreach (ProductLine pl in pls2)
+                foreach (ProductLine pl in productLines2)
                     context.ProductLine.Add(pl);
+                //Callum Was here
+                // was he tho?
             } else
             {
                 System.Diagnostics.Debug.WriteLine("!!! couldn't find test user !!!");
