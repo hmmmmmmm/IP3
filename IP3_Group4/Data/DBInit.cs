@@ -51,17 +51,8 @@ namespace IP3_Group4.Data
                     new List<ProductLine>(),
                     testUserID
                 );
-
-                Receipt r2 = new Receipt(
-                    "Sainsbury's Supermarkets Ltd",
-                    DateTime.Now,
-                    new List<ProductLine>(),
-                    testUserID
-                );
-
                 context.Receipts.Add(r1);
                 context.SaveChanges();
-
                 r1 = context.Receipts.ToList().Last(r => r.UserID == r1.UserID);
                 List<ProductLine> productLines1 = new List<ProductLine>
                     {
@@ -108,10 +99,18 @@ namespace IP3_Group4.Data
                     };
                 foreach (ProductLine pl in productLines1)
                     context.ProductLine.Add(pl);
+                r1.CalculateTotal();
+                
 
+
+                Receipt r2 = new Receipt(
+                    "Sainsbury's Supermarkets Ltd",
+                    DateTime.Now.AddDays(-2),
+                    new List<ProductLine>(),
+                    testUserID
+                );
                 context.Receipts.Add(r2);
                 context.SaveChanges();
-
                 r2 = context.Receipts.ToList().Last(r => r.UserID == r2.UserID);
                 List<ProductLine> productLines2 = new List<ProductLine>
                     {
@@ -150,6 +149,7 @@ namespace IP3_Group4.Data
                     };
                 foreach (ProductLine pl in productLines2)
                     context.ProductLine.Add(pl);
+                r2.CalculateTotal();
                 //Callum Was here
                 // was he tho?
             } else

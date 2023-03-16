@@ -68,7 +68,7 @@ namespace IP3_Group4.Models
                         }
                         else
                         {
-                            products.Add(new ProductCounter(pl.ItemName));
+                            products.Add(new ProductCounter(pl.ItemName, pl.Quantity));
                         }
 
                         totalProds += pl.Quantity;
@@ -77,6 +77,7 @@ namespace IP3_Group4.Models
 
                 Shops = shops.OrderBy(s => s.Visits).ToList();
                 Products = products.OrderBy(p => p.Buys).ToList();
+                Products.Reverse();
 
                 if (totalProds != 0)
                 {
