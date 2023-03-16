@@ -51,6 +51,7 @@ namespace IP3_Group4.Controllers
 
                     // creates a list of strings equal to the output of the API's first index (the entire receipt in a usable format)
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
+                    List<ProductLine> productLines = new List<ProductLine>();
                     ReceiptTemplate template;
 
 
@@ -95,7 +96,7 @@ namespace IP3_Group4.Controllers
                                         pl.Quantity = 1; // sets quantity to 1
                                     }
 
-                                    receipt.ProductLines.Add(pl); // adds ProductLine to receipt object
+                                    productLines.Add(pl); // adds ProductLine to receipt object
                                     
 
                                 } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
@@ -152,6 +153,13 @@ namespace IP3_Group4.Controllers
                         receipt.UserID = User.Identity.GetUserId();
 
                         db.Receipts.Add(receipt);
+                        db.SaveChanges();
+                        receipt = db.Receipts.Find(receipt);
+                        foreach (ProductLine pl in productLines)
+                        {
+                            pl.ReceiptID = receipt.ID;
+                            db.ProductLine.Add(pl);
+                        }
                         db.SaveChanges();
 
                     } else

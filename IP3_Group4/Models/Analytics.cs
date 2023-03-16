@@ -35,6 +35,8 @@ namespace IP3_Group4.Models
 
                 foreach (Receipt r in receipts) // loops through all receipts
                 {
+                    
+
                     if (r.PurchaseDate >= monthStart)
                     {
                         MonthTotal += r.TotalPrice;

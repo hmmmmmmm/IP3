@@ -73,12 +73,8 @@ namespace IP3_Group4.Controllers
             string id = User.Identity.GetUserId();
             // gets all receipts belonging to this user
             List<Receipt> receipts = dbContext.Receipts.Where(r => r.UserID == id).ToList();
-
-            //for (int i = 0; i <= receipts.Count; i++)
-            //{
-            //    if (receipts[i].UserID != User.Identity.GetUserId())
-            //        receipts.Remove(receipts[i]);
-            //}
+            foreach (Receipt receipt in receipts)
+                receipt.ProductLines = dbContext.ProductLine.Where(r => r.ReceiptID == receipt.ID).ToList();
 
             return receipts;
         }

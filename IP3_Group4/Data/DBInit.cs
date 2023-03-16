@@ -48,44 +48,7 @@ namespace IP3_Group4.Data
                 Receipt r1 = new Receipt(
                     "Sainsbury's Supermarkets Ltd",
                     DateTime.Now,
-                    new List<ProductLine>
-                    {
-                        new ProductLine()
-                        {
-                            ItemName = "Strawberries",
-                            Quantity = 1,
-                            Price = (decimal) 1.50,
-                            Brand = "Sainsbury's"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Ramen Noodles",
-                            Quantity = 3,
-                            Price = (decimal) 1.00,
-                            Brand = "Pot Noodle"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Cheese Slices",
-                            Quantity = 1,
-                            Price = (decimal) 1.50,
-                            Brand = "Sainsbury's"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Fresh Roll",
-                            Quantity = 6,
-                            Price = (decimal) 0.50,
-                            Brand = "Sainsbury's"
-                        },
-                        new ProductLine()
-                        {
-                            ItemName = "Ketchup",
-                            Quantity = 1,
-                            Price = (decimal) 1.00,
-                            Brand = "Heinz"
-                        }
-                    },
+                    new List<ProductLine>(),
                     testUserID
                 );
 
@@ -128,7 +91,93 @@ namespace IP3_Group4.Data
 
                 context.Receipts.Add(r1);
                 context.Receipts.Add(r2);
+                context.SaveChanges();
 
+                r1 = context.Receipts.ToList().Last(r => r.UserID == r1.UserID);
+                List<ProductLine> pls1 = new List<ProductLine>
+                    {
+                        new ProductLine()
+                        {
+                            ItemName = "Strawberries",
+                            Quantity = 1,
+                            Price = (decimal) 1.50,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r1.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Ramen Noodles",
+                            Quantity = 3,
+                            Price = (decimal) 1.00,
+                            Brand = "Pot Noodle",
+                            ReceiptID = r1.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Cheese Slices",
+                            Quantity = 1,
+                            Price = (decimal) 1.50,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r1.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Fresh Roll",
+                            Quantity = 6,
+                            Price = (decimal) 0.50,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r1.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Ketchup",
+                            Quantity = 1,
+                            Price = (decimal) 1.00,
+                            Brand = "Heinz",
+                            ReceiptID = r1.ID
+                        }
+                    };
+                foreach (ProductLine pl in pls1)
+                    context.ProductLine.Add(pl);
+
+                r2 = context.Receipts.ToList().Last(r => r.UserID == r2.UserID);
+                List<ProductLine> pls2 = new List<ProductLine>
+                    {
+                        new ProductLine()
+                        {
+                            ItemName = "Cheese Slices",
+                            Quantity = 1,
+                            Price = (decimal) 1.50,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r2.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Fresh Roll",
+                            Quantity = 6,
+                            Price = (decimal) 0.50,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r2.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "Ketchup",
+                            Quantity = 1,
+                            Price = (decimal) 1.00,
+                            Brand = "Heinz",
+                            ReceiptID = r2.ID
+                        },
+                        new ProductLine()
+                        {
+                            ItemName = "2pt Milk",
+                            Quantity = 1,
+                            Price = (decimal) 2.00,
+                            Brand = "Sainsbury's",
+                            ReceiptID = r2.ID
+                        }
+                    };
+                foreach (ProductLine pl in pls2)
+                    context.ProductLine.Add(pl);
             } else
             {
                 System.Diagnostics.Debug.WriteLine("!!! couldn't find test user !!!");

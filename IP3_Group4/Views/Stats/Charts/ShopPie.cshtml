@@ -1,7 +1,15 @@
-﻿
+﻿@using IP3_Group4.Models
 @{
     ViewBag.Title = "ShopPie";
+    Analytics analytics = ViewBag.Analytics;
 }
 
-<h2>ShopPie</h2>
-
+@{
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Shops")
+        .AddSeries(
+            name: "Shop",
+            xValue: analytics.Shops.Select(s => s.Shop).ToArray(),
+            yValues: analytics.Shops.Select(s => s.Visits).ToArray())
+        .Write();
+}
