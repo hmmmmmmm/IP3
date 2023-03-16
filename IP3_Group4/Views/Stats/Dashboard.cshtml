@@ -36,18 +36,30 @@
 
     <div class="col-md-4 dashboard-section">
         <h4>Your favourite shop:</h4>
-        
+
         <h1>@Model.Shops[0].Shop</h1>
-        <h4>with @Model.Shops[0].Visits visits.</h4>
+        @if (Model.Shops[0].Visits > 0)
+        {
+            <h4>with @Model.Shops[0].Visits visits.</h4>
+        }
+
     </div>
 
     <div class="col-md-2"></div>
 
-    <div class="col-md-4 dashboard-section">
-        <!-- Section is link to Spending page -->
-        <h4>Your most bought product is:</h4>
-        <h1>put product here</h1>
-    </div>
+    <a href="@Url.Action("Spending", "Stats")">
+        <div class="col-md-4 dashboard-section">
+            <!-- Section is link to Spending page -->
+
+            <h4>Your most bought product is:</h4>
+            <h1>@Model.Products[0].Product</h1>
+            @if (Model.Products[0].Buys > 0)
+            {
+                <h4>with @Model.Products[0].Buys buys.</h4>
+            }
+
+        </div>
+    </a>
 
     <div class="col-md-1"></div>
 </div>

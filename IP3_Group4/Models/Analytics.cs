@@ -81,11 +81,10 @@ namespace IP3_Group4.Models
                     foreach (ProductCounter pc in products)
                         pc.GetPercentOfBought(totalProds);
                 }
-                //if ()
             }
             else
             {
-                Shops = new List<ShopCounter> { new ShopCounter("No shops visited yet...") };
+                Shops = new List<ShopCounter> { new ShopCounter("No shops visited yet...", 0) };
                 Products = new List<ProductCounter> { new ProductCounter("No products bought yet...") };
                 MonthTotal = 0; WeekTotal = 0;
             }
