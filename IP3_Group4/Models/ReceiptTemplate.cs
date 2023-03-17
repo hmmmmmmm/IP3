@@ -32,24 +32,24 @@ namespace IP3_Group4.Models
         // Empty constructor. Only use for database purposes really.
         public ReceiptTemplate()
         {
-            ID = 0;
-            Shop = "";
-            ProductStartPrompt = "";
-            ProductEndPrompt = "";
-            QuantityLineFormat = "";
-            PaymentTypePrompt = "";
-            DateTimePrompt = "";
+            ID = 0; // sets id
+            Shop = ""; // sets the shop 
+            ProductStartPrompt = ""; // sets the line above the product list
+            ProductEndPrompt = ""; // sets the line below the product list
+            QuantityLineFormat = ""; // sets the format of quantity lines
+            PaymentTypePrompt = ""; // sets the line above the payment type
+            DateTimePrompt = ""; // sets line above where DateTime is found
         }
 
         // Standard constructor. Does what it says on the packet. Don't bother with setting ID tho as the database will do it for you.
         public ReceiptTemplate(string shop, string productStartPrompt, string productEndPrompt, string quantityLineFormat, string paymentTypePrompt, string dateTimePrompt)
         {
-            Shop = shop;
-            ProductStartPrompt = productStartPrompt;
-            ProductEndPrompt = productEndPrompt;
-            PaymentTypePrompt = paymentTypePrompt;
-            DateTimePrompt = dateTimePrompt;
-            QuantityLineFormat = quantityLineFormat;
+            Shop = shop; // sets shop name
+            ProductStartPrompt = productStartPrompt; // sets the line above the product list
+            ProductEndPrompt = productEndPrompt; // sets the line below the product list
+            PaymentTypePrompt = paymentTypePrompt;  // sets the line above the payment type
+            DateTimePrompt = dateTimePrompt; // sets line above where DateTime is found
+            QuantityLineFormat = quantityLineFormat; // sets the format of quantity lines
         }
     }
 }

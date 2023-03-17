@@ -4,9 +4,9 @@ namespace IP3_Group4.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index() // Action for home page
         {
-            return View();
+            return View(); // returns home page
         }
     }
 }

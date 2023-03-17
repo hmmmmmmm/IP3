@@ -11,15 +11,15 @@ namespace IP3_Group4.Data
 {
     public class DBContext : IdentityDbContext<User>
     {
-        public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<Receipt> Receipts { get; set; } // the Receipt table
 
-        public DbSet<ProductLine> ProductLine { get; set; }
+        public DbSet<ProductLine> ProductLine { get; set; } // the ProductLine table
 
-        public DbSet<PaymentType> PaymentTypes { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; } // the PaymentTypes table (slightly broken)
 
-        public DbSet<ReceiptTemplate> ReceiptTemplates { get; set; }
+        public DbSet<ReceiptTemplate> ReceiptTemplates { get; set; } // the ReceiptTemplates table
 
-        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Budget> Budgets { get; set; } // the Budgets table
 
         public DBContext()
             : base("ReceiptBudgetApp", throwIfV1Schema: false)

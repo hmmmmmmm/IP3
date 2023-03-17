@@ -12,6 +12,10 @@
     {
         <div class="alert alert-danger">Receipt upload failed.</div>
     }
+    else if (ViewBag.Successful == "f")
+    {
+        <div class="alert alert-danger">File must be a in the format ".png", ".jpg" or ".jpeg"!</div>
+    }
 
     <div>
         @Html.TextBox("file", "", new { type = "file", id = "filename" }) <br />

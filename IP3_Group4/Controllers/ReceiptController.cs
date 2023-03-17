@@ -14,23 +14,28 @@ namespace IP3_Group4.Controllers
     public class ReceiptController : Controller
     {
         // Used to handle Views relating to the uploading, editing, and viewing of receipts
-        DBContext db = new DBContext();
+
+
+        DBContext db = new DBContext(); // an instance of the database to be accessed
 
         // GET: Vision
         [HttpGet]
-        public ActionResult UploadReceipt()
+        public ActionResult UploadReceipt() // loads the UploadReceipt page (without a receipt being uploaded)
         {
-            return View();
+            return View(); // returns receipt upload page
         }
 
         [HttpPost]
-        public ActionResult UploadReceipt(HttpPostedFileBase file)
+        public ActionResult UploadReceipt(HttpPostedFileBase file) // catches HTTPPost from a receipt being uploaded
         {
-            try
+            try // catches any nasty errors
             {
                 if (file != null) // checks a file was uploaded
                 {
-                    
+                    string ending = file.FileName.Substring(file.FileName.IndexOf("."));
+                    if (ending != ".png" && ending != ".jpg" && ending != ".jpeg")
+                        throw new ArgumentException("Invalid file type!");
+
 
                     string filePath = Server.MapPath(Url.Content("~/ReceiptR-key.json")); // sets location of the credentials key
 
@@ -47,28 +52,30 @@ namespace IP3_Group4.Controllers
                     bool hasProds = false; // tells app if it already has accessed the products list.
 
                     // for debugging: prints API output line by line to console
-                    System.Diagnostics.Debug.WriteLine(response[0].Description);
+                    // System.Diagnostics.Debug.WriteLine(response[0].Description);
 
                     // creates a list of strings equal to the output of the API's first index (the entire receipt in a usable format)
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
-                    List<ProductLine> productLines = new List<ProductLine>();
-                    ReceiptTemplate template;
+
+                    List<ProductLine> productLines = new List<ProductLine>(); // creates List to store the product lines
+                    ReceiptTemplate template; // creates ReceiptTemplate object to store the corresponding template
 
 
-                    if (lines.Contains("B&M Retail Ltd"))
+                    if (lines.Contains("B&M Retail Ltd")) // checks if receipt from B&M
                     {
-                        template = db.ReceiptTemplates.First(rt => rt.Shop == "b&m retail ltd");
+                        template = db.ReceiptTemplates.First(rt => rt.Shop == "b&m retail ltd"); // gets the B&M template
                         receipt.Shop = "B&M Retail Ltd"; // sets name of the shop bought from
-                    } else if (lines.Contains("Sainsbury's Supermarkets Ltd"))
+
+                    } else if (lines.Contains("Sainsbury's Supermarkets Ltd")) // checks if receipt from Sainsbury's
                     {
-                        template = db.ReceiptTemplates.First(rt => rt.Shop == "sainsbury's supermarkets ltd");
+                        template = db.ReceiptTemplates.First(rt => rt.Shop == "sainsbury's supermarkets ltd"); // gets the Sainsbury's template
                         receipt.Shop = "Sainsbury's Supermarkets Ltd"; // sets name of the shop bought from
-                    } else
+                    } else // if no valid template
                     {
-                        throw new Exception("No attributed template");
+                        throw new Exception("No attributed template"); // throws error with the details
                     }
 
-                    if (template != null)
+                    if (template != null) // ensures null wasn't returned for the template
                     {
                         // loops through every line in the scanned receipt
                         for (int i = 0; i < lines.Count; i++)
@@ -77,7 +84,6 @@ namespace IP3_Group4.Controllers
                             if (!hasProds && lines[i].ToLower().Contains(template.ProductStartPrompt))
                             {                                
                                 hasProds = true; // tells app it has found the list of products
-
 
                                 i++; // skips to line after products list start marker
                                 do
@@ -101,9 +107,11 @@ namespace IP3_Group4.Controllers
 
                                 } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
 
-                                continue;
+                                continue; // skips to next line
                             }
 
+                            // PAYMENT METHODS ARE MESSED UP FOR SOME REASON
+                            #region PaymentMethods
                             //// checks if next line is the payment method
                             //if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
                             //{
@@ -125,6 +133,7 @@ namespace IP3_Group4.Controllers
 
                             //    continue;
                             //}
+                            #endregion
 
                             // checks if next line is the Date/Time of purchase
                             if (template.DateTimePrompt != "" && lines[i].ToLower().Contains(template.DateTimePrompt))
@@ -141,7 +150,7 @@ namespace IP3_Group4.Controllers
                                     if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
                                     {
                                         receipt.ProductLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value
-                                        receipt.TotalPrice += receipt.ProductLines[j].LineTotal;
+                                        receipt.TotalPrice += receipt.ProductLines[j].LineTotal; // adds ProductLine total to receipt total
                                     }
 
                                     i++; // goes to next scanner line to avoid repetition
@@ -150,60 +159,58 @@ namespace IP3_Group4.Controllers
                             }
                         }
 
-                        receipt.UserID = User.Identity.GetUserId();
+                        receipt.UserID = User.Identity.GetUserId(); // sets the ID of the user that uplaoded the receipt
 
-                        db.Receipts.Add(receipt);
-                        db.SaveChanges();
-                        receipt = db.Receipts.Find(receipt);
-                        foreach (ProductLine pl in productLines)
+                        db.Receipts.Add(receipt); // queues the receipt update to the database
+                        db.SaveChanges(); // writes changes to database
+
+                        // need to get the receipt's database ID in order to write the ProductLines successfully
+                        receipt = db.Receipts.Find(receipt); // gets the receipt back
+                        foreach (ProductLine pl in productLines) // loops through all productlines
                         {
-                            pl.ReceiptID = receipt.ID;
-                            db.ProductLine.Add(pl);
+                            pl.ReceiptID = receipt.ID; // sets line's receipt id
+                            db.ProductLine.Add(pl); // queues line update to database
                         }
-                        db.SaveChanges();
+                        db.SaveChanges(); // writes all changes to database
 
-                    } else
+                    } else // if there's no receipt template
                     {
-                        throw new Exception("No receipt template");
+                        throw new Exception("No receipt template found for " + receipt.Shop); // throws an error saying no template found
                     }
 
-
-
-                    ViewBag.Successful = "y";
-                    return View();
+                    ViewBag.Successful = "y"; // tells View the upload was successfuly
+                    return View(); // returns the View
                 }
-                else
+                else // if no file was uploaded
                 {
-                    throw new Exception("no file upload detected");
+                    throw new Exception("No file uploaded!"); // throws exception with details of why
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) // catches all exceptions thrown
             {
-                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message);
-                ViewBag.Successful = "n";
-                return View();
+                System.Diagnostics.Debug.WriteLine("Error: " + ex.Message); // writes error message to the Output tab
+                if (ex.Message == "Invalid file type!" || ex.Message == "No file uploaded!") // checks if the issue was with the file type
+                    ViewBag.Successful = "f"; // if it was, sets ViewBag to inform the View
+                else // if it wasn't
+                    ViewBag.Successful = "n"; // tells View to give generic failure message
+                return View(); // returns View
             }
         }
 
         [HttpPost]
-        public ActionResult EditReceipt(Receipt receipt)
+        public ActionResult EditReceipt(Receipt receipt) // Action for EditReceipt view
         {
-            return View(receipt);
+            return View(receipt); // returns the view with the selected receipt as model
         }
 
-        public ActionResult Overview()
+        public ActionResult Overview() // Action for Receipt Overview page
         {
-            List<Receipt> receipts = db.Receipts.Include(r => r.ProductLines).OrderByDescending(r => r.PurchaseDate).ToList();
+            List<Receipt> receipts = db.Receipts.Include(r => r.ProductLines).Where(r => r.UserID == User.Identity.GetUserId()).OrderByDescending(r => r.PurchaseDate).ToList(); // retrieves all receipts, and corresponding productlines, from database that belong to user
 
-            if (receipts.Any())
-            {
-                receipts.RemoveAll(r => r.UserID != User.Identity.GetUserId());
-            } else
-            {
-                ViewBag.Message = "No receipts uploaded yet...";
-            }            
+            if (!receipts.Any()) // checks if any receipts were found
+                ViewBag.Message = "No receipts uploaded yet..."; // if not sends message to view  
 
-            return View(receipts);
+            return View(receipts); // returns view with the list of receipts
         }
     }
 }

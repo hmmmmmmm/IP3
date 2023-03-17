@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -23,45 +24,47 @@ namespace IP3_Group4.Models
         // for seeding database
         public Receipt(string shop, DateTime purchaseDate, List<ProductLine> productLines, string userID)
         {
-            Shop = shop;
-            PurchaseDate = purchaseDate;
-            ProductLines = productLines;
-            UserID = userID;
+            Shop = shop; // sets shop name
+            PurchaseDate = purchaseDate; // sets date receipt was printed
+            ProductLines = productLines; // sets the productlines
+            UserID = userID; // sets receipt's user id
 
-            CalculateTotal();
+            CalculateTotal(); // calculates the total price on the receipt
         }
 
         // Standard constructor
         public Receipt(string Shop, DateTime PurchaseDate)
         {
-            this.Shop = Shop;
-            this.PurchaseDate = PurchaseDate;
-            ProductLines = new List<ProductLine>();
+            this.Shop = Shop; // sets shop name
+            this.PurchaseDate = PurchaseDate; // sets date and time of purchase
+            ProductLines = new List<ProductLine>(); // initialises productline list
         }
 
         // Empty constructor
         public Receipt()
         {
-            this.ID = 0;
-            this.Shop = "";
-            this.TotalPrice = 0;
-            this.PurchaseDate = DateTime.UtcNow;
-            ProductLines = new List<ProductLine>();
+            this.ID = 0; // sets id
+            this.Shop = ""; // sets shop name
+            this.TotalPrice = 0; // sets total price of receipt
+            this.PurchaseDate = DateTime.UtcNow; // sets the date the receipt was purchased to now
+            ProductLines = new List<ProductLine>(); // initialises productline list
 
         }
 
-        public void CalculateTotal()
+        public void CalculateTotal() // calculates total price of receipt
         {
-            foreach (ProductLine pl in ProductLines)
-                TotalPrice += pl.LineTotal;
+            foreach (ProductLine pl in ProductLines) // loops through all productlines
+                TotalPrice += pl.LineTotal; // adds line's price to receipt total
         }
 
-        //#region PaymentType Properties
+        #region PaymentType Properties
+        // broken lol
+
         //// Used to store the PaymentType of the receipt.
         //[Display(Name = "Payment Type"), ForeignKey("PaymentType")]
         //public int PaymentID { get; set; } // PaymentType ID
         //public PaymentType PaymentType { get; set; } // Actual payment type (cash, card)
-        //#endregion
+        #endregion
 
         #region ProductLines Properties
         // List of products found on the receipt
@@ -86,15 +89,15 @@ namespace IP3_Group4.Models
         // standard constructor
         public PaymentType(string Type)
         {
-            this.Type = Type;
+            this.Type = Type; // sets the type of payment
         }
 
         // empty constructor
         public PaymentType()
         {
-            this.ID = 0;
-            this.Type = "";
-            Receipts = new List<Receipt>();
+            this.ID = 0; // sets payment type's id
+            this.Type = ""; // sets payment type's type
+            Receipts = new List<Receipt>(); // why tho...
         }
 
         #region ProductLines Properties
@@ -116,20 +119,20 @@ namespace IP3_Group4.Models
         // standard constructor
         public ProductLine(int ID, string ItemName, int Quantity, decimal Price)
         {
-            this.ID = ID;
-            this.ItemName = ItemName;
-            this.Quantity = Quantity;
-            this.Price = Price;
+            this.ID = ID; // sets lines id
+            this.ItemName = ItemName; // sets lines product name
+            this.Quantity = Quantity; // sets number of product bought
+            this.Price = Price; // sets price per unit
         }
 
         // emtpy constructor
         public ProductLine()
         {
-            this.ID = 0;
-            this.ItemName = "";
-            this.Brand = "";
-            this.Quantity = 0;
-            this.Price = 0;
+            this.ID = 0; // sets id
+            this.ItemName = ""; // sets items name
+            this.Brand = ""; // sets items brand
+            this.Quantity = 0; // sets items quantity
+            this.Price = 0; // sets items price
         }
 
         #region Receipt Properties
