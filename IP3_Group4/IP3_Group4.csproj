@@ -333,7 +333,7 @@
     <Content Include="Views\Stats\Dashboard.cshtml" />
     <Content Include="Views\Stats\Spending.cshtml" />
     <Content Include="Views\Stats\Budget.cshtml" />
-    <Content Include="Views\Stats\Charts\ShopPie.cshtml" />
+    <Content Include="Views\Shared\_shopChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

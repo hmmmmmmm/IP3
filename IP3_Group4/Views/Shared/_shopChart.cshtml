@@ -1,7 +1,7 @@
 ﻿@using IP3_Group4.Models
+@model Analytics 
 @{
     ViewBag.Title = "ShopPie";
-    Analytics analytics = ViewBag.Analytics;
 }
 
 @{
@@ -9,7 +9,7 @@
         .AddTitle("Shops")
         .AddSeries(
             name: "Shop",
-            xValue: analytics.Shops.Select(s => s.Shop).ToArray(),
-            yValues: analytics.Shops.Select(s => s.Visits).ToArray())
+            xValue: Model.Shops.Select(s => s.Shop).ToArray(),
+            yValues: Model.Shops.Select(s => s.Visits).ToArray())
         .Write();
 }

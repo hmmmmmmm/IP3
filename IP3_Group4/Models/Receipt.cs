@@ -22,12 +22,16 @@ namespace IP3_Group4.Models
 
 
         // for seeding database
-        public Receipt(string shop, DateTime purchaseDate, List<ProductLine> productLines, string userID)
+        public Receipt(string shop, DateTime purchaseDate, List<ProductLine> productLines, User user, PaymentType paymentType)
         {
             Shop = shop; // sets shop name
             PurchaseDate = purchaseDate; // sets date receipt was printed
             ProductLines = productLines; // sets the productlines
-            UserID = userID; // sets receipt's user id
+            UserID = user.Id; // sets receipt's user id
+            User = user;
+            PaymentID = paymentType.ID;
+            PaymentType = paymentType;
+
 
             CalculateTotal(); // calculates the total price on the receipt
         }
@@ -54,16 +58,16 @@ namespace IP3_Group4.Models
         public void CalculateTotal() // calculates total price of receipt
         {
             foreach (ProductLine pl in ProductLines) // loops through all productlines
+            {
                 TotalPrice += pl.LineTotal; // adds line's price to receipt total
+            }
         }
 
         #region PaymentType Properties
-        // broken lol
-
-        //// Used to store the PaymentType of the receipt.
-        //[Display(Name = "Payment Type"), ForeignKey("PaymentType")]
-        //public int PaymentID { get; set; } // PaymentType ID
-        //public PaymentType PaymentType { get; set; } // Actual payment type (cash, card)
+        // Used to store the PaymentType of the receipt.
+        [Display(Name = "Payment Type"), ForeignKey("PaymentType")]
+        public int PaymentID { get; set; } // PaymentType ID
+        public PaymentType PaymentType { get; set; } // Actual payment type (cash, card)
         #endregion
 
         #region ProductLines Properties

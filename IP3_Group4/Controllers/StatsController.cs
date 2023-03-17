@@ -24,12 +24,8 @@ namespace IP3_Group4.Controllers
 
         public ActionResult Spending() // Action for Spending page
         {
-            if (analytics == null) // if user hasnt been to dashboard yet
-                return RedirectToAction("Dashboard"); // sends them to dashboard
-            else // otherwise allows user to pass
-                ViewBag.Analytics = analytics; // puts data in a ViewBag to be accessed by charts
-                                               // NOT SURE THIS ACTUALLY WORKS
-            return View(); // returns the View
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            return View(analytics); // returns the View
         }
 
         [HttpGet]
@@ -75,7 +71,8 @@ namespace IP3_Group4.Controllers
 
         private List<Receipt> GetUsersReceipts() // method to get the receipts belonging to user
         {
-            List<Receipt> receipts = dbContext.Receipts.Where(r => r.UserID == User.Identity.GetUserId()).ToList(); // gets all receipts belonging to user
+            string id = User.Identity.GetUserId();
+            List<Receipt> receipts = dbContext.Receipts.Where(r => r.UserID == id).ToList(); // gets all receipts belonging to user
             foreach (Receipt receipt in receipts) // loops through each receipt and gets the productlines
                 receipt.ProductLines = dbContext.ProductLine.Where(r => r.ReceiptID == receipt.ID).ToList(); // retrieves receipt's productlines
 
@@ -86,7 +83,12 @@ namespace IP3_Group4.Controllers
 
         private Budget GetUsersBudget() // method to get the user's budget object
         {
-            return dbContext.Budgets.First(b => b.UserID == User.Identity.GetUserId()); // returns the user's budget
+            string id = User.Identity.GetUserId();
+            List<Budget> budgets = dbContext.Budgets.Where(b => b.UserID == id).ToList();
+            if (budgets.Count >= 1)
+                return budgets[0];
+            else
+                return null;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Web.WebPages;
 
 namespace IP3_Group4.Data
 {
-    public class DBInit : DropCreateDatabaseAlways<DBContext>
+    public class DBInit : DropCreateDatabaseIfModelChanges<DBContext>
     {
         protected override void Seed(DBContext context) // seeds data into the database
         {
@@ -36,14 +36,17 @@ namespace IP3_Group4.Data
             context.ReceiptTemplates.Add(sainsburys); // queues Sainsbury's template for database
 
             // seed receipts
-            string testUserID = context.Users.First(u => u.Email == "test@receiptr.com").Id; // gets test user's id
-            if (!testUserID.IsEmpty()) // checks the test user was found
+            var testUser = context.Users.First(u => u.Email == "test@receiptr.com"); // gets test user's id
+            var paymentType = context.PaymentTypes.First(p => p.Type == "card");
+
+            if (testUser != null) // checks the test user was found
             {
                 Receipt r1 = new Receipt( // creates new receipt object
                     "Sainsbury's Supermarkets Ltd", // passes Sainsburys to new receipt
                     DateTime.Now, // passes now as the purchase date
                     new List<ProductLine>(), // passes an empty list of productlines
-                    testUserID // passes the id of the test user
+                    testUser, // passes the id of the test user
+                    paymentType
                 );
                 context.Receipts.Add(r1); // adds the receipt to database queue
                 context.SaveChanges(); // saves all database changes
@@ -101,7 +104,8 @@ namespace IP3_Group4.Data
                     "Sainsbury's Supermarkets Ltd", // passes Sainsburys as shop
                     DateTime.Now.AddDays(-2), // passes two days ago as purchase date
                     new List<ProductLine>(), // passes empty list of product lines
-                    testUserID // passes user's id
+                    testUser, // passes user's id
+                    paymentType
                 );
                 context.Receipts.Add(r2); // queues receipt for database
                 context.SaveChanges(); // adds to database

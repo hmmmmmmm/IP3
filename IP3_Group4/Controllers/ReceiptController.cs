@@ -52,7 +52,7 @@ namespace IP3_Group4.Controllers
                     bool hasProds = false; // tells app if it already has accessed the products list.
 
                     // for debugging: prints API output line by line to console
-                    // System.Diagnostics.Debug.WriteLine(response[0].Description);
+                     System.Diagnostics.Debug.WriteLine(response[0].Description);
 
                     // creates a list of strings equal to the output of the API's first index (the entire receipt in a usable format)
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
@@ -110,30 +110,30 @@ namespace IP3_Group4.Controllers
                                 continue; // skips to next line
                             }
 
-                            // PAYMENT METHODS ARE MESSED UP FOR SOME REASON
-                            #region PaymentMethods
-                            //// checks if next line is the payment method
-                            //if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
-                            //{
-                            //    i++;
+                            // checks if next line is the payment method
+                            if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
+                            {
+                                i++;
 
-                            //    if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
-                            //    {
-                            //        receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Card");
+                                if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
+                                {
+                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Card");
+                                    receipt.PaymentType = payType;
+                                    receipt.PaymentID = payType.ID;
+                                }
+                                else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
+                                {
+                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Cash");
+                                    receipt.PaymentType = payType;
+                                    receipt.PaymentID = payType.ID;
+                                }
+                                else // if payment type is neither, deals with it
+                                {
+                                    throw new Exception("PaymentType not found");
+                                }
 
-                            //    }
-                            //    else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
-                            //    {
-                            //        receipt.PaymentType = db.PaymentTypes.First(pt => pt.Type == "Cash");
-                            //    }
-                            //    else // if payment type is neither, deals with it
-                            //    {
-                            //        throw new Exception("PaymentType Not Found");
-                            //    }
-
-                            //    continue;
-                            //}
-                            #endregion
+                                continue;
+                            }
 
                             // checks if next line is the Date/Time of purchase
                             if (template.DateTimePrompt != "" && lines[i].ToLower().Contains(template.DateTimePrompt))
@@ -159,13 +159,16 @@ namespace IP3_Group4.Controllers
                             }
                         }
 
-                        receipt.UserID = User.Identity.GetUserId(); // sets the ID of the user that uplaoded the receipt
+                        string id = User.Identity.GetUserId();
+                        var user = db.Users.Find(id);
+                        receipt.UserID = user.Id; // sets the ID of the user that uploaded the receipt
+                        receipt.User = user;
 
                         db.Receipts.Add(receipt); // queues the receipt update to the database
                         db.SaveChanges(); // writes changes to database
 
                         // need to get the receipt's database ID in order to write the ProductLines successfully
-                        receipt = db.Receipts.Find(receipt); // gets the receipt back
+                        receipt = db.Receipts.ToList().Last(r => r.UserID == id); // gets the receipt back
                         foreach (ProductLine pl in productLines) // loops through all productlines
                         {
                             pl.ReceiptID = receipt.ID; // sets line's receipt id
@@ -205,7 +208,8 @@ namespace IP3_Group4.Controllers
 
         public ActionResult Overview() // Action for Receipt Overview page
         {
-            List<Receipt> receipts = db.Receipts.Include(r => r.ProductLines).Where(r => r.UserID == User.Identity.GetUserId()).OrderByDescending(r => r.PurchaseDate).ToList(); // retrieves all receipts, and corresponding productlines, from database that belong to user
+            string id = User.Identity.GetUserId();
+            List<Receipt> receipts = db.Receipts.Include(r => r.ProductLines).Where(r => r.UserID == id).OrderByDescending(r => r.PurchaseDate).ToList(); // retrieves all receipts, and corresponding productlines, from database that belong to user
 
             if (!receipts.Any()) // checks if any receipts were found
                 ViewBag.Message = "No receipts uploaded yet..."; // if not sends message to view  
