@@ -216,5 +216,11 @@ namespace IP3_Group4.Controllers
 
             return View(receipts); // returns view with the list of receipts
         }
+
+        public ActionResult Details(int receiptID)
+        {
+            List<ProductLine> products = db.ProductLine.Where(r => r.ID == receiptID).ToList();
+            return View(products);
+        }
     }
 }

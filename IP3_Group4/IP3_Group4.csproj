@@ -334,6 +334,7 @@
     <Content Include="Views\Stats\Spending.cshtml" />
     <Content Include="Views\Stats\Budget.cshtml" />
     <Content Include="Views\Shared\_shopChart.cshtml" />
+    <Content Include="Views\Receipt\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
