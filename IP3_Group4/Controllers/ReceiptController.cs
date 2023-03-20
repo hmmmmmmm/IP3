@@ -200,7 +200,7 @@ namespace IP3_Group4.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult EditReceipt(Receipt receipt) // Action for EditReceipt view
         {
             return View(receipt); // returns the view with the selected receipt as model
@@ -217,6 +217,7 @@ namespace IP3_Group4.Controllers
             return View(receipts); // returns view with the list of receipts
         }
 
+        [HttpGet]
         public ActionResult Details(Receipt receipt)
         {
             List<ProductLine> products = db.ProductLine.Where(pl => pl.ReceiptID == receipt.ID).ToList();
