@@ -14,9 +14,13 @@ namespace IP3_Group4.Models
         public int ID { get; set; } // Primary key for by database
 
         [Required]
+        [Display(Name = "Shop")]
         public string Shop { get; set; } // Shop where receipt was obtained
+
+        [Display(Name = "Total Price")]
         public decimal TotalPrice { get; set; } // TotalPrice of the receipt
 
+        [Display(Name = "Purchase Date")]
         [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}"), Required]
         public DateTime PurchaseDate { get; set; } // Date and Time of purchase
 
