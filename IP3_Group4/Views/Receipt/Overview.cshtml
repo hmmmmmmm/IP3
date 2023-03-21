@@ -34,9 +34,35 @@
                 @Html.DisplayFor(modelItem => item.PurchaseDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditReceipt", new { id=item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+                @Html.ActionLink("Edit", "EditReceipt", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+
+                @using (Html.BeginForm("Delete", "Receipt", new { id = item.ID }))
+                {
+                    var deleteBlogModal = $"deleteblogmodal_{item.ID}";
+                    <div class="flex-button">
+                        <a href="#" data-toggle="modal" data-target="#@deleteBlogModal" class="btn btn-danger">Delete Blog</a>
+                    </div>
+                    <div class="modal fade" id="@deleteBlogModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title text-left">Delete Confirmation</h4>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <strong>Are you sure you want to delete @item.Editor.DisplayName blog?</strong>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                                    <input type="submit" value="Delete Blog" id="btnContinueDelete" class="btn btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </td>
         </tr>
 }

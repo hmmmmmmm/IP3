@@ -1,5 +1,5 @@
-﻿@model IEnumerable<IP3_Group4.Models.ProductLine>
-    @using IP3_Group4.Data
+﻿@using IP3_Group4.Models;
+@model Receipt
 
     @{
         ViewBag.Title = "Details";
@@ -11,20 +11,20 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Brand)
+                Brand
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemName)
+                Item
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                Quantity
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Price
             </th>
         </tr>
 
-        @foreach (var item in Model) {
+        @foreach (var item in Model.ProductLines) {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Brand)
@@ -36,7 +36,7 @@
                     @Html.DisplayFor(modelItem => item.Quantity)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                    £@Html.DisplayFor(modelItem => item.Price)
                 </td>
             </tr>
             }
