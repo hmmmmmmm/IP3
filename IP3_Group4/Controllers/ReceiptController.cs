@@ -150,7 +150,7 @@ namespace IP3_Group4.Controllers
                                     if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
                                     {
                                         receipt.ProductLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value
-                                        receipt.TotalPrice += receipt.ProductLines[j].LineTotal; // adds ProductLine total to receipt total
+                                        //receipt.TotalPrice += receipt.ProductLines[j].LineTotal; // adds ProductLine total to receipt total
                                     }
 
                                     i++; // goes to next scanner line to avoid repetition
@@ -163,7 +163,7 @@ namespace IP3_Group4.Controllers
                         var user = db.Users.Find(id);
                         receipt.UserID = user.Id; // sets the ID of the user that uploaded the receipt
                         receipt.User = user;
-                        receipt.CalculateTotal();
+                        //receipt.CalculateTotal();
 
                         db.Receipts.Add(receipt); // queues the receipt update to the database
                         db.SaveChanges(); // writes changes to database

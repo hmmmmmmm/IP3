@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Stats";
+}
+
+<h2>Stats</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>The shops you've visited:</h4>
+        <img width="550" height="350" src='@Url.Action("Shops", "Stats")' alt="Chart" />
+    </div>
+
+    <div class="col-md-offset-6">
+        <h4>What you spent:</h4>
+        <img width="550" height="350" src='@Url.Action("Spending", "Stats")' alt="Chart" />
+    </div>
+</div>

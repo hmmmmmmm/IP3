@@ -31,7 +31,7 @@ namespace IP3_Group4.Data
 
             // seed receipt templates
             ReceiptTemplate bandm = new ReceiptTemplate("b&m retail ltd", "customer copy", " item", " x ", "paid by", "customer receipt"); // seeds B&M receipt template
-            ReceiptTemplate sainsburys = new ReceiptTemplate("sainsbury's supermarkets ltd", "vat number: ", " balance due", " @ ", " balance due", ""); // seeds Sainsburys receipt template
+            ReceiptTemplate sainsburys = new ReceiptTemplate("sainsbury's supermarkets ltd", "vat number: ", " balance due", " @ ", "", ""); // seeds Sainsburys receipt template
             context.ReceiptTemplates.Add(bandm); // queues B&M template for database
             context.ReceiptTemplates.Add(sainsburys); // queues Sainsbury's template for database
 
@@ -95,10 +95,9 @@ namespace IP3_Group4.Data
                         }
                     };
                 foreach (ProductLine pl in productLines1) // loops through newly created productlines
+                {
                     context.ProductLine.Add(pl); // adds those lines to the database queue
-                r1.CalculateTotal(); // calculates the total price of the receipt
-                
-
+                }
 
                 Receipt r2 = new Receipt( // creates new receipt
                     "Sainsbury's Supermarkets Ltd", // passes Sainsburys as shop
@@ -147,10 +146,14 @@ namespace IP3_Group4.Data
                         }
                     };
                 foreach (ProductLine pl in productLines2) // loops through new productlines
+                {
                     context.ProductLine.Add(pl); // queues productlines for database
-                r2.CalculateTotal(); // calculates receipt's new total
+                }                   
 
-            } else // if the test user couldnt be retrieved
+                //r2.CalculateTotal(); // calculates receipt's new total
+
+            }
+            else // if the test user couldnt be retrieved
             {
                 System.Diagnostics.Debug.WriteLine("Unable to find test user!"); // writes error to output tab
             }

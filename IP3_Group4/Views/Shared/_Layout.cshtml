@@ -19,9 +19,10 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Dashboard", "Dashboard", "Stats")</li>
-                        <li>@Html.ActionLink("Upload Receipt", "UploadReceipt", "Receipt")</li>
-                        <li>@Html.ActionLink("Overview", "Overview", "Receipt")</li>
+                    <li>@Html.ActionLink("Dashboard", "Dashboard", "Stats")</li>
+                    <li>@Html.ActionLink("Stats", "Stats", "Stats")</li>
+                    <li>@Html.ActionLink("Upload Receipt", "UploadReceipt", "Receipt")</li>
+                    <li>@Html.ActionLink("Receipts", "Overview", "Receipt")</li>
                     }
 
                 </ul>

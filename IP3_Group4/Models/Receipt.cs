@@ -10,6 +10,7 @@ namespace IP3_Group4.Models
 {
     public class Receipt
     {
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; } // Primary key for by database
 
@@ -18,7 +19,16 @@ namespace IP3_Group4.Models
         public string Shop { get; set; } // Shop where receipt was obtained
 
         [Display(Name = "Total Price")]
-        public decimal TotalPrice { get; set; } // TotalPrice of the receipt
+        public decimal TotalPrice { get
+            {
+                decimal t = 0;
+                foreach (ProductLine pl in ProductLines) // loops through all productlines
+                {
+                    t += pl.LineTotal; // adds line's price to receipt total
+                }
+                return t;
+            } 
+        } // TotalPrice of the receipt
 
         [Display(Name = "Purchase Date")]
         [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}"), Required]
@@ -34,10 +44,7 @@ namespace IP3_Group4.Models
             UserID = user.Id; // sets receipt's user id
             User = user;
             PaymentID = paymentType.ID;
-            PaymentType = paymentType;
-
-
-            CalculateTotal(); // calculates the total price on the receipt
+            PaymentType = paymentType;        
         }
 
         // Standard constructor
@@ -53,18 +60,9 @@ namespace IP3_Group4.Models
         {
             this.ID = 0; // sets id
             this.Shop = ""; // sets shop name
-            this.TotalPrice = 0; // sets total price of receipt
             this.PurchaseDate = DateTime.UtcNow; // sets the date the receipt was purchased to now
             ProductLines = new List<ProductLine>(); // initialises productline list
 
-        }
-
-        public void CalculateTotal() // calculates total price of receipt
-        {
-            foreach (ProductLine pl in ProductLines) // loops through all productlines
-            {
-                TotalPrice += pl.LineTotal; // adds line's price to receipt total
-            }
         }
 
         #region PaymentType Properties
@@ -122,7 +120,7 @@ namespace IP3_Group4.Models
         public string Brand { get; set; } // the Brand of the product (eg. "Cadbury's")
         public int Quantity { get; set; } // number of the product bought
         public decimal Price { get; set; } // the price for each product
-        public decimal LineTotal => (Price *= Quantity); // the total price of Price * Quantity. automatically calculated
+        public decimal LineTotal => (Price * Quantity); // the total price of Price * Quantity. automatically calculated
 
         // standard constructor
         public ProductLine(int ID, string ItemName, int Quantity, decimal Price)

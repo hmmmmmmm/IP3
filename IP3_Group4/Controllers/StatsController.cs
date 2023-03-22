@@ -18,26 +18,22 @@ namespace IP3_Group4.Controllers
         public ActionResult Dashboard() // Action for the Dashboard page
         {
             analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
-
             return View(analytics);
         }
 
-        public ActionResult Spending() // Action for Spending page
+        public ActionResult Stats() // Action for Spending page
         {
             analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
             return View(analytics); // returns the View
         }
 
-        public ActionResult Shops() // Action for Shops page
-        {
-            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
-            return View(analytics); // returns the View
-        }
+
 
         [HttpGet]
         public ActionResult Budget() // Action for Budget page
         {
-            Budget budge = dbContext.Budgets.First(b => b.UserID == User.Identity.GetUserId()); // gets the user's budget info from database
+            string id = User.Identity.GetUserId();
+            Budget budge = dbContext.Budgets.FirstOrDefault(b => b.UserID == id); // gets the user's budget info from database
             if (budge != null) // checks a budget was actually found
             {
                 return View(budge); // if so, returns the budget to the view
@@ -56,6 +52,7 @@ namespace IP3_Group4.Controllers
                 // NEED TO CHECK IF THIS IS AN UPDATE OR A CREATION!!!
 
                 budge.UserID = User.Identity.GetUserId(); // sets the budgets UserID to users id
+                budge.User = dbContext.Users.First(u => u.Id == budge.UserID);
                 budge.LastReset = DateTime.Now; // sets today as the last reset date
                 budge.NextReset = DateTime.Now.AddDays(30); // sets next reset for in 30 day's time
 
@@ -73,17 +70,34 @@ namespace IP3_Group4.Controllers
                 ViewBag.Message = "Failed to set budget!"; // creates error message for view
                 return View(); // returns the view
             }
-        } 
+        }
+
+        // CHART ACTIONS
+
+        public ActionResult Shops() // Action for Shops page
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            return View(analytics); // returns the View
+        }
+
+        public ActionResult Spending() // Action for Spending page
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            return View(analytics); // returns the View
+        }
+
+
 
         private List<Receipt> GetUsersReceipts() // method to get the receipts belonging to user
         {
             string id = User.Identity.GetUserId();
-            List<Receipt> receipts = dbContext.Receipts.Where(r => r.UserID == id).ToList(); // gets all receipts belonging to user
-            foreach (Receipt receipt in receipts) // loops through each receipt and gets the productlines
-                receipt.ProductLines = dbContext.ProductLine.Where(r => r.ReceiptID == receipt.ID).ToList(); // retrieves receipt's productlines
+            List<Receipt> receipts = dbContext.Receipts.Include("ProductLines").Where(r => r.UserID == id).ToList(); // gets all receipts belonging to user
 
-            // WOULD CODE IN RECEIPT OVERVIEW ACTION WORK?
-
+            //foreach (Receipt receipt in receipts) // loops through each receipt and gets the productlines
+            //{
+            //    receipt.ProductLines = dbContext.ProductLine.Where(r => r.ReceiptID == receipt.ID).ToList(); // retrieves receipt's productlines
+            //}
+                
             return receipts; // returns the list of receipts
         }
 
@@ -92,9 +106,12 @@ namespace IP3_Group4.Controllers
             string id = User.Identity.GetUserId();
             List<Budget> budgets = dbContext.Budgets.Where(b => b.UserID == id).ToList();
             if (budgets.Count >= 1)
+            {
                 return budgets[0];
-            else
-                return null;
+            }             
+
+            return null;
+                         
         }
     }
 }

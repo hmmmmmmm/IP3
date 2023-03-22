@@ -12,29 +12,21 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-1"></div>
-
-    <div class="col-md-4 dashboard-section">
+    <div class="col-md-6 dashboard-section">
         <h4>This week, you spent:</h4>
         <h1>£@Model.WeekTotal</h1>
     </div>
 
-    <div class="col-md-2"></div>
-
-    <div class="col-md-4 dashboard-section">
+    <div class="col-md-offset-6 dashboard-section">
         <h4>This month, you spent:</h4>
         <h1>£@Model.MonthTotal</h1>
     </div>
-
-    <div class="col-md-1"></div>
 </div>
 
 <br />
 
 <div class="row">
-    <div class="col-md-1"></div>
-
-    <div class="col-md-4 dashboard-section">
+    <div class="col-md-6 dashboard-section">
         <h4>Your favourite shop:</h4>
 
         <h1>@Model.Shops[0].Shop</h1>
@@ -45,36 +37,34 @@
 
     </div>
 
+    <div class="col-md-offset-6 dashboard-section">
+        <!-- Section is link to Spending page -->
 
-    <div class="col-md-2"></div>
-
-    <a href="@Url.Action("Spending", "Stats")">
-        <div class="col-md-4 dashboard-section">
-            <!-- Section is link to Spending page -->
-
-            <h4>Your most bought product is:</h4>
-            <h1>@Model.Products[0].Product</h1>
-            @if (Model.Products[0].Buys > 0)
+        <h4>Your most bought product is:</h4>
+        <h1>@Model.Products[0].Product</h1>
+        @if (Model.Products[0].Buys > 0)
             {
-            <h4>with @Model.Products[0].Buys buys.</h4>
+        <h4>with @Model.Products[0].Buys buys.</h4>
             }
-
-        </div>
-    </a>
-
-    <div class="col-md-1"></div>
+    </div>
 </div>
+
+<br />
 
 <div class="row">
-    <div class="col-md-1">
-        <img width="550" height="300" src='@Url.Action("Shops", "Stats")' alt="Chart" />
-    </div>
+    <div class="col-md-6 dashboard-section">
+        @if (Model.RemainingBudget != -1)
+        {
+            <h4>You have</h4>
+            <h1>£@Model.RemainingBudget</h1>
+            <h4>left in your budget.</h4>
+        } else
+                {
+                    <h4>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h4>
+                }
 
-    <div class="col-md-offset-6">
-        <img width="550" height="300" src='@Url.Action("Spending", "Stats")' alt="Chart" />
     </div>
 </div>
-
 
 }
 else

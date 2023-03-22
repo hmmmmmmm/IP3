@@ -21,6 +21,9 @@ namespace IP3_Group4.Models
         {
             if (receipts.Any()) // checks user has actually scanned a receipt
             {
+                WeekTotal = 0;
+                MonthTotal = 0;
+
                 LastReceipt = receipts.Last(); // gets the latest receipt
                 DateTime weekStart = DateTime.Now.AddDays(-7); // gets date of 7 days ago
                 DateTime monthStart = DateTime.Now.AddDays(-30); // gets date of 30 days ago
@@ -31,19 +34,29 @@ namespace IP3_Group4.Models
 
                 if (budge != null) // checks if user has set up their budget
                     RemainingBudget = budge.Amount; // sets current remaining budget to the budgets amount (calculations done further down)
+                else
+                {
+                    RemainingBudget = -1;
+                }
+                    
 
                 foreach (Receipt r in receipts) // loops through all user's receipts
                 {
                     if (r.PurchaseDate >= monthStart) // checks if the receipt was printed within the last 30 days
                     {
                         MonthTotal += r.TotalPrice; // if yes, adds that to the total spent across the month
-
+ 
                         if (r.PurchaseDate >= weekStart) // checks if receipt was printed within the last week
+                        {
                             WeekTotal += r.TotalPrice; // if yes, adds that to the total spent across the week
+                        }
                     }
 
                     if (budge != null && r.PurchaseDate >= budge.LastReset) // checks budget isnt null again and checks receipt was printed since last reset
+                    {
                         RemainingBudget -= r.TotalPrice; // subtracts receipt's amount from amount left in budget
+                    }
+                        
                     
 
                     int sIndex = shops.FindIndex(s => s.Shop == r.Shop); // tries to locate the shop the receipt was bought from within list of shops
@@ -65,7 +78,7 @@ namespace IP3_Group4.Models
                 }
 
                 Shops = shops.OrderBy(s => s.Visits).ToList(); // orders the shops by least to most popular
-                // !!! MAY NEED REVERSED - TEST !!! //
+                Shops.Reverse();
                 
 
                 if (products.Count != 0) // checks if any products have been found

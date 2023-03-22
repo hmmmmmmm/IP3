@@ -45,7 +45,7 @@ namespace IP3_Group4.Models
         }
 
         public Budget() { // empty constructor
-            Amount = 0; // sets amount to 0
+            Amount = -1; // sets amount to 0
             LastReset = DateTime.Now; // sets last reset to today
             NextReset = DateTime.Now.AddDays(30); // sets next reset to in 30 days
         }
@@ -68,6 +68,10 @@ namespace IP3_Group4.Models
             // calculates what percent of the user's budget will be spent by end of reset period
             DaysLeft = (int)(budge.NextReset - DateTime.Now).TotalDays; //figures out how many days are left
             int daysGone = (int) (budge.LastReset - DateTime.Now).TotalDays; // figures out how many days have gone by since last reset
+            if (daysGone == 0)
+            {
+                daysGone = 1;
+            }
             decimal spentByEnd = (spent / daysGone) * 30; // figures out how much is spent on average per day, then multiplies by 30 to find out how much will be spent by next reset
             TargetPercentage = (int) (spentByEnd / budge.Amount); // turns the amount into a percentage
             // credits to my bestie Calvin for helping me not overthink this lol :D

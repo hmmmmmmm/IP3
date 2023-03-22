@@ -1,11 +1,47 @@
 ﻿@using IP3_Group4.Models;
 @model Budget
 @{
-    ViewBag.Title = "BudgetOverview";
+    ViewBag.Title = "Budget";
 }
 
-<h2>Budget Overview</h2>
+<h2>Your Budget</h2>
 
-Users can view info on how much of their budget the've spent here.
-Maybe also be able to set / change budget here? Or that can be an additional page if needed.
-User only needs to be able to set / change budget amount
+@if (User.Identity.IsAuthenticated)
+{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert">
+            @ViewBag.Message
+        </div>
+    }
+
+    if (Model != null && Model.Analytics != null)
+    {
+        <h3>You have £@Model.Analytics.Remaining left in your budget.</h3>
+        <h3>At the current rate of spending, you will have spent @Model.Analytics.TargetPercentage% of your budget by @Model.NextReset.Date.</h3>
+        <h3>There are @Model.Analytics.DaysLeft days left before your budget resets.</h3>
+    }
+
+    using (Html.BeginForm("Budget", "Stats", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        <h4>Set your monthly budget here:</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default" value="Set Budget" />
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>You must be logged in to view this page!</p>
+}
