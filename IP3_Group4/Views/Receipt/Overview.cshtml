@@ -1,9 +1,12 @@
 ﻿@model IEnumerable<IP3_Group4.Models.Receipt>
-    @using IP3_Group4.Data
+@using IP3_Group4.Data
 
-    @{
+@{
     ViewBag.Title = "Overview";
-    }
+}
+
+@if (User.Identity.IsAuthenticated)
+{
 
     <h2>Overview</h2>
 
@@ -22,49 +25,57 @@
             <th></th>
         </tr>
 
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Shop)
-            </td>
-            <td>
-                £@Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurchaseDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditReceipt", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Shop)
+                </td>
+                <td>
+                    £@Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PurchaseDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditReceipt", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
 
-                @using (Html.BeginForm("Delete", "Receipt", new { id = item.ID }))
-                {
-                    var deleteReceiptModal = $"deleteReceiptModal_{item.ID}";
-                    <div class="flex-button">
-                        <a href="#" data-toggle="modal" data-target="#@deleteReceiptModal" class="btn btn-danger">Delete Receipt</a>
-                    </div>
-                    <div class="modal fade" id="@deleteReceiptModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h4 class="modal-title text-left">Delete Confirmation</h4>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <strong>Are you sure you want to delete this receipt?</strong>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
-                                    <input type="submit" value="Delete Receipt" id="btnContinueDelete" class="btn btn-success" />
+                    @using (Html.BeginForm("Delete", "Receipt", new { id = item.ID }))
+                    {
+                        var deleteReceiptModal = $"deleteReceiptModal_{item.ID}";
+                        <div class="flex-button">
+                            <a href="#" data-toggle="modal" data-target="#@deleteReceiptModal" class="btn btn-danger">Delete Receipt</a>
+                        </div>
+                        <div class="modal fade" id="@deleteReceiptModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title text-left">Delete Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <strong>Are you sure you want to delete this receipt?</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                                        <input type="submit" value="Delete Receipt" id="btnContinueDelete" class="btn btn-success" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </td>
-        </tr>
-}
+                    }
+                </td>
+            </tr>
+        }
 
     </table>
+}
+else
+{
+<div class="alert alert-danger">
+    <p>You must be logged in to view this page.</p>
+</div>
+}

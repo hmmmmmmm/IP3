@@ -28,6 +28,12 @@ namespace IP3_Group4.Controllers
             return View(analytics); // returns the View
         }
 
+        public ActionResult Shops() // Action for Shops page
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            return View(analytics); // returns the View
+        }
+
         [HttpGet]
         public ActionResult Budget() // Action for Budget page
         {

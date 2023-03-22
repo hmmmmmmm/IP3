@@ -163,6 +163,7 @@ namespace IP3_Group4.Controllers
                         var user = db.Users.Find(id);
                         receipt.UserID = user.Id; // sets the ID of the user that uploaded the receipt
                         receipt.User = user;
+                        receipt.CalculateTotal();
 
                         db.Receipts.Add(receipt); // queues the receipt update to the database
                         db.SaveChanges(); // writes changes to database
@@ -223,10 +224,14 @@ namespace IP3_Group4.Controllers
             return View(receipt);
         }
 
-        public ActionResult Delete(Receipt receipt)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
+            Receipt receipt = db.Receipts.FirstOrDefault(r => r.ID == id);
+
             db.Receipts.Remove(receipt);
             db.SaveChanges();
+
             ViewBag.Message = "Receipt deleted successfully!";
             return RedirectToAction("Overview");
         }

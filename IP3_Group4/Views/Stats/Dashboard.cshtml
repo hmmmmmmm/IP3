@@ -40,10 +40,11 @@
         <h1>@Model.Shops[0].Shop</h1>
         @if (Model.Shops[0].Visits > 0)
         {
-            <h4>with @Model.Shops[0].Visits visits.</h4>
+        <h4>with @Model.Shops[0].Visits visits.</h4>
         }
 
     </div>
+
 
     <div class="col-md-2"></div>
 
@@ -55,7 +56,7 @@
             <h1>@Model.Products[0].Product</h1>
             @if (Model.Products[0].Buys > 0)
             {
-                <h4>with @Model.Products[0].Buys buys.</h4>
+            <h4>with @Model.Products[0].Buys buys.</h4>
             }
 
         </div>
@@ -64,7 +65,16 @@
     <div class="col-md-1"></div>
 </div>
 
-<img src='@Url.Action("Spending", "Stats")' alt="Chart" />
+<div class="row">
+    <div class="col-md-1">
+        <img width="550" height="300" src='@Url.Action("Shops", "Stats")' alt="Chart" />
+    </div>
+
+    <div class="col-md-offset-6">
+        <img width="550" height="300" src='@Url.Action("Spending", "Stats")' alt="Chart" />
+    </div>
+</div>
+
 
 }
 else
@@ -72,6 +82,4 @@ else
 <div class="alert alert-danger">
     <p>You must be logged in to view this page.</p>
 </div>
-
 }
-

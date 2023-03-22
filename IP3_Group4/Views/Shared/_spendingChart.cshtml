@@ -1,0 +1,15 @@
+﻿@using IP3_Group4.Models
+@model Analytics
+@{
+    ViewBag.Title = "SpendingPie";
+}
+
+@{
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Spending")
+        .AddSeries(
+            name: "Items",
+            xValue: Model.Products.Select(p => p.Product).ToArray(),
+            yValues: Model.Products.Select(p => p.Buys).ToArray())
+        .Write();
+}
