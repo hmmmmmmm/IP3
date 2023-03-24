@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using IP3_Group4.Data;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity.Migrations;
+using System.Net;
 
 namespace IP3_Group4.Controllers
 {
@@ -145,12 +147,11 @@ namespace IP3_Group4.Controllers
                             // checks if the line is a price or not, and starts getting prices if they are
                             if (lines[i].ToLower().Contains("£"))
                             {
-                                for (int j = 0; j < receipt.ProductLines.Count; j++) // loops through all read-in products
+                                for (int j = 0; j < productLines.Count; j++) // loops through all read-in products
                                 {
-                                    if (receipt.ProductLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
+                                    if (productLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
                                     {
-                                        receipt.ProductLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value
-                                        //receipt.TotalPrice += receipt.ProductLines[j].LineTotal; // adds ProductLine total to receipt total
+                                        productLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value                                        
                                     }
 
                                     i++; // goes to next scanner line to avoid repetition
@@ -163,7 +164,13 @@ namespace IP3_Group4.Controllers
                         var user = db.Users.Find(id);
                         receipt.UserID = user.Id; // sets the ID of the user that uploaded the receipt
                         receipt.User = user;
-                        //receipt.CalculateTotal();
+
+                        if (receipt.PaymentType == null)
+                        {
+                            PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Unknown");
+                            receipt.PaymentType = payType;
+                            receipt.PaymentID = payType.ID;
+                        }                      
 
                         db.Receipts.Add(receipt); // queues the receipt update to the database
                         db.SaveChanges(); // writes changes to database
@@ -201,10 +208,56 @@ namespace IP3_Group4.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult EditReceipt(Receipt receipt) // Action for EditReceipt view
+        [HttpGet]
+        public ActionResult EditReceipt(int? id) // Action for EditReceipt view
         {
+            //check if id is null
+            if (id == null)
+            {
+                //return badrequest
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //load the given receipt
+            Receipt receipt = db.Receipts.Find(id);
+            receipt.ProductLines = db.ProductLine.Where(r => r.ReceiptID == id).ToList();
+            receipt.User = db.Users.Find(receipt.UserID);
+            receipt.PaymentType = db.PaymentTypes.Find(receipt.PaymentID);
+
+            //check if the blog is null
+            if (receipt == null)
+            {
+                //return http not found
+                return HttpNotFound();
+            }
+
             return View(receipt); // returns the view with the selected receipt as model
+        }
+
+        // public ActionResult Edit([Bind(Include = "ID, CategoryID, Title, Content, PosterID, Poster, DatePosted")] Blog blog)
+
+        [HttpPost]
+        public ActionResult EditReceipt(Receipt receipt)
+        {    
+            if (ModelState.IsValid)
+            {             
+                foreach (ProductLine line in receipt.ProductLines)
+                {
+                    db.ProductLine.AddOrUpdate(line);
+                }
+
+                //db.Entry(receipt).State = EntityState.Modified;
+
+                //foreach (ProductLine line in receipt.ProductLines)
+                //{
+                //    db.Entry(line).State = EntityState.Modified;
+                //}
+                
+                db.SaveChanges();
+                return RedirectToAction("Overview");
+            }
+
+            return View(receipt);
         }
 
         public ActionResult Overview() // Action for Receipt Overview page

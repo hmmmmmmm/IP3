@@ -31,7 +31,7 @@ namespace IP3_Group4.Models
         } // TotalPrice of the receipt
 
         [Display(Name = "Purchase Date")]
-        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm:ss}"), Required]
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}"), Required]
         public DateTime PurchaseDate { get; set; } // Date and Time of purchase
 
 
@@ -62,7 +62,6 @@ namespace IP3_Group4.Models
             this.Shop = ""; // sets shop name
             this.PurchaseDate = DateTime.UtcNow; // sets the date the receipt was purchased to now
             ProductLines = new List<ProductLine>(); // initialises productline list
-
         }
 
         #region PaymentType Properties
@@ -116,10 +115,12 @@ namespace IP3_Group4.Models
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; } // ID of the ProductLine
+        [Display(Name = "Item Name")]
         public string ItemName { get; set; } // name of the Product (usually some kind of gibberish
         public string Brand { get; set; } // the Brand of the product (eg. "Cadbury's")
         public int Quantity { get; set; } // number of the product bought
         public decimal Price { get; set; } // the price for each product
+        [Display(Name = "Total")]
         public decimal LineTotal => (Price * Quantity); // the total price of Price * Quantity. automatically calculated
 
         // standard constructor

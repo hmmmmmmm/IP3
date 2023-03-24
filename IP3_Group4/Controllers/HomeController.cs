@@ -8,5 +8,15 @@ namespace IP3_Group4.Controllers
         {
             return View(); // returns home page
         }
+
+        public ActionResult About() // Action for home page
+        {
+            return View(); // returns home page
+        }
+
+        public ActionResult Contact() // Action for home page
+        {
+            return View(); // returns home page
+        }
     }
 }

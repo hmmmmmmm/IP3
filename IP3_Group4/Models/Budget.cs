@@ -46,8 +46,8 @@ namespace IP3_Group4.Models
 
         public Budget() { // empty constructor
             Amount = -1; // sets amount to 0
-            LastReset = DateTime.Now; // sets last reset to today
-            NextReset = DateTime.Now.AddDays(30); // sets next reset to in 30 days
+            LastReset = DateTime.Now.Date; // sets last reset to today
+            NextReset = DateTime.Now.Date.AddDays(30); // sets next reset to in 30 days
         }
     }
 

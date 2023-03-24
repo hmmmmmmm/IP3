@@ -22,8 +22,10 @@
             Follow these simple steps to get started with ReceiptR today!
 
             <ol>
-                <li>Create an account @Html.ActionLink("here", "Register", "Account")</li>
-                <li>Click "Upload Receipt"</li>
+                @if (!User.Identity.IsAuthenticated) {
+                    <li>Create an account @Html.ActionLink("here", "Register", "Account").</li>
+                }
+                <li>Go to Receipts > Upload.</li>
                 <li>Upload a receipt!</li>
             </ol>
 

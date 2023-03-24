@@ -1,78 +1,58 @@
-﻿@using IP3_Group4.Models;
-@model Receipt
+﻿@model IP3_Group4.Models.Receipt
 
 @{
-    ViewBag.Title = "Edit Receipt";
+    ViewBag.Title = "EditReceipt";
 }
 
-<h2>Edit Receipt</h2>
+<h2>EditReceipt</h2>
 
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-warning">
-        @ViewBag.Message
-    </div>
-}
+@using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+ {
+@Html.AntiForgeryToken()
 
-@if (User.Identity.IsAuthenticated)
-{
+<table class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.PurchaseDate)
+    @Html.HiddenFor(model => model.PaymentID)
+    @Html.HiddenFor(model => model.Shop)
+    @Html.HiddenFor(model => model.UserID)
 
-    using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+
+    @for (int i = 0; i < Model.ProductLines.Count(); i++)
     {
-        <h4>Edit this receipt.</h4>
-        <hr />
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(m => m.Shop, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Shop, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.TotalPrice, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                £@Html.TextBoxFor(m => m.TotalPrice, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.PurchaseDate, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.PurchaseDate, new { @class = "form-control" })
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.ProductLines[i].ID)
+        @Html.HiddenFor(model => model.ProductLines[i].Brand)
+        @Html.HiddenFor(model => model.ProductLines[i].ReceiptID)
+        <tr>
+            <td>@Html.LabelFor(model => model.ProductLines[i].ItemName, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td>
+                @Html.EditorFor(model => model.ProductLines[i].ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductLines[i].ItemName, "", new { @class = "text-danger" })
+            </td>
+        </tr>
 
-        <table class="prod-lines">
-            <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-                <th>Price per Item</th>
-                <th>Total</th>
-            </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.ProductLines[i].Quantity, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td>
+                @Html.EditorFor(model => model.ProductLines[i].Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductLines[i].Quantity, "", new { @class = "text-danger" })
+            </td>
+        </tr>
 
-            @for (int i = 0; i < Model.ProductLines.Count; i++)
-            {
-                <tr>
-                    <td>@Html.TextBoxFor(m => m.ProductLines[i].ItemName, new { @class = "form-control" })</td>
-                    <td>@Html.TextBoxFor(m => m.ProductLines[i].Quantity, new { @class = "form-control" })</td>
-                    <td>@Html.TextBoxFor(m => m.ProductLines[i].Price, new { @class = "form-control" })</td>
-                    <td>£@Model.ProductLines[i].LineTotal</td>
-                </tr>
-            }
-        </table>
-
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Save Changes" />
-            </div>
-        </div>
+        <tr>
+            <td>@Html.LabelFor(model => model.ProductLines[i].Price, htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td>
+                @Html.EditorFor(model => model.ProductLines[i].Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProductLines[i].Price, "", new { @class = "text-danger" })
+            </td>
+        </tr>
     }
 
+    <tr><td><input type="submit" value="Save" class="btn btn-default" /></td></tr>
+</table>
 }
-else
-{
-    <div class="alert alert-danger">
-        <p>You must be logged in to view this page.</p>
-    </div>
-}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

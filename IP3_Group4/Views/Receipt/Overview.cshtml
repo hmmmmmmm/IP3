@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<IP3_Group4.Models.Receipt>
-@using IP3_Group4.Data
+    @using IP3_Group4.Data
 
-@{
+    @{
     ViewBag.Title = "Overview";
-}
+    }
 
-@if (User.Identity.IsAuthenticated)
+    @if (User.Identity.IsAuthenticated)
 {
 
     <h2>Overview</h2>
@@ -27,25 +27,30 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Shop)
-                </td>
-                <td>
-                    £@Html.DisplayFor(modelItem => item.TotalPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PurchaseDate)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditReceipt", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-
-                    @using (Html.BeginForm("Delete", "Receipt", new { id = item.ID }))
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Shop)
+            </td>
+            <td>
+                £@Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseDate)
+            </td>
+            <td>
+                <div class="flex-parent">
+                    <div class="buttons-parent">
+                        <div class="flex-button">
+                            @Html.ActionLink("Details", "Details", "Receipt", new { id = item.ID }, new { @class = "btn btn-success" })
+                        </div>
+                        <div class="flex-button">
+                            @Html.ActionLink("Edit", "EditReceipt", "Receipt", new { id = item.ID }, new { @class = "btn btn-warning" })
+                        </div>
+                        @using (Html.BeginForm("Delete", "Receipt", new { id = item.ID }))
                     {
                         var deleteReceiptModal = $"deleteReceiptModal_{item.ID}";
                         <div class="flex-button">
-                            <a href="#" data-toggle="modal" data-target="#@deleteReceiptModal" class="btn btn-danger">Delete Receipt</a>
+                            <a href="#" data-toggle="modal" data-target="#@deleteReceiptModal" class="btn btn-danger">Delete</a>
                         </div>
                         <div class="modal fade" id="@deleteReceiptModal" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog">
@@ -67,15 +72,17 @@
                             </div>
                         </div>
                     }
-                </td>
-            </tr>
+                    </div>
+                </div>
+            </td>
+        </tr>
         }
 
     </table>
 }
 else
 {
-<div class="alert alert-danger">
-    <p>You must be logged in to view this page.</p>
-</div>
+    <div class="alert alert-danger">
+        <p>You must be logged in to view this page.</p>
+    </div>
 }

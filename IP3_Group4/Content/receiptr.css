@@ -1,5 +1,6 @@
 ﻿body {
     background-color: #415A77;
+    font-size: 12pt;
 }
 
 .navbar {
@@ -18,22 +19,104 @@
     background-color: #E0E1DD;
 }
 
-.body-content row p, .body-content row li {
-    font-size: 12pt;
-}
+    .body-content row p, .body-content row li {
+        font-size: 12pt;
+    }
 
 .dashboard-section {
-    border-color: #1B263B;
-    border-style: solid;
-    border-width: 2px;
-    border-radius: 10px;
+    /*
+        border-color: #1B263B;
+        border-style: solid;
+        border-width: 2px;
+        border-radius: 10px;
+    */
 
     padding: 5px;
-
     text-align: center;
     align-self: center;
 }
 
-.container {
-    display: flex; /* or inline-flex */
+/*#region NAVBAR DROPDOWNS*/
+.navbar-image {
+    height: 50px;
+    padding: 0px 10px;
 }
+
+.subnav {
+    float: left;
+    overflow: hidden;
+}
+
+    .subnav .subnavbtn {
+        font-size: 12pt;
+        border: none;
+        outline: none;
+        color: #e8e8e8;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+        border-color: #0D1B2A;
+        border-width: 1px;
+        border-style: none solid;
+    }
+
+    .nav a:hover,
+    .subnav:hover .subnavbtn {
+        background-color: #415A77;
+    }
+
+.subnav-content {
+    display: none;
+    position: absolute;
+    background-color: #0D1B2A;
+    width: fit-content;
+    z-index: 1;
+    /*
+    border-color: #415A77;
+    border-style: solid;
+    border-width: 1px;*/
+}
+
+    .subnav-content a {
+        float: left;
+        color: #E0E1DD;
+        text-decoration: none;
+        padding: 14px 16px;
+        font-size: 12pt;
+    }
+
+        .nav a:hover,
+        .subnav-content a:hover {
+            background-color: #415A77;
+        }
+
+.subnav:hover .subnav-content {
+    display: block;
+}
+/*#endregion*/
+
+.flex-parent {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 0px;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.flex-buttons-parent {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: inherit;
+}
+
+.flex-button {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: .5%;
+
+}
+
+

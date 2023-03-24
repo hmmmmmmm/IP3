@@ -3,6 +3,7 @@ using IP3_Group4.Models;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -26,8 +27,6 @@ namespace IP3_Group4.Controllers
             analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
             return View(analytics); // returns the View
         }
-
-
 
         [HttpGet]
         public ActionResult Budget() // Action for Budget page
@@ -56,7 +55,7 @@ namespace IP3_Group4.Controllers
                 budge.LastReset = DateTime.Now; // sets today as the last reset date
                 budge.NextReset = DateTime.Now.AddDays(30); // sets next reset for in 30 day's time
 
-                dbContext.Budgets.Add(budge); // adds the budget to the database queue
+                dbContext.Budgets.AddOrUpdate(budge); // adds the budget to the database queue
                 dbContext.SaveChangesAsync(); // saves the budget to database
 
                 ViewBag.Message = "Budget set successfully!"; // creates success message for view
@@ -104,10 +103,11 @@ namespace IP3_Group4.Controllers
         private Budget GetUsersBudget() // method to get the user's budget object
         {
             string id = User.Identity.GetUserId();
-            List<Budget> budgets = dbContext.Budgets.Where(b => b.UserID == id).ToList();
-            if (budgets.Count >= 1)
+            Budget budget = dbContext.Budgets.FirstOrDefault(b => b.UserID == id);
+            
+            if (budget != null)
             {
-                return budgets[0];
+                return budget;
             }             
 
             return null;

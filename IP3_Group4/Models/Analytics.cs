@@ -15,6 +15,7 @@ namespace IP3_Group4.Models
         public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
         public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
         public decimal RemainingBudget { get; set; } // Amount left in the budget after deducting total of all user's receipts
+        public int DaysLeftInBudget { get; set; } = 0; // number of days left in the budget
 
 
         public Analytics(List<Receipt> receipts, Budget budge)
@@ -33,7 +34,10 @@ namespace IP3_Group4.Models
                 int totalProds = 0; // the total number of products user has bought
 
                 if (budge != null) // checks if user has set up their budget
+                { 
                     RemainingBudget = budge.Amount; // sets current remaining budget to the budgets amount (calculations done further down)
+                    DaysLeftInBudget = (int)(budge.NextReset - budge.LastReset).TotalDays;
+                }
                 else
                 {
                     RemainingBudget = -1;
@@ -51,7 +55,6 @@ namespace IP3_Group4.Models
                             WeekTotal += r.TotalPrice; // if yes, adds that to the total spent across the week
                         }
                     }
-
                     if (budge != null && r.PurchaseDate >= budge.LastReset) // checks budget isnt null again and checks receipt was printed since last reset
                     {
                         RemainingBudget -= r.TotalPrice; // subtracts receipt's amount from amount left in budget

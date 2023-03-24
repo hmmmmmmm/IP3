@@ -12,6 +12,7 @@
 <hr />
 
 <div class="row">
+    <h2 style="text-align: center;">Spending Overview</h2>
     <div class="col-md-6 dashboard-section">
         <h4>This week, you spent:</h4>
         <h1>£@Model.WeekTotal</h1>
@@ -23,9 +24,39 @@
     </div>
 </div>
 
-<br />
+<hr />
 
 <div class="row">
+    <h2 style="text-align: center;">Your Budget</h2>
+    <div class="col-md-6 dashboard-section">
+        <h4>Left to Spend:</h4>
+        @if (Model.RemainingBudget != -1)
+        {
+        <h1>£@Model.RemainingBudget</h1>
+        <h4>left in your budget.</h4>
+        }else
+        {
+        <h1>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h1>
+        }
+    </div>
+
+    <div class="col-md-offset-6 dashboard-section">
+
+        <h4>Days Left:</h4>
+        @if (Model.RemainingBudget != -1)
+        {
+        <h1>@Model.DaysLeftInBudget</h1>
+        }else
+        {
+        <h1>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h1>
+        }
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <h2 style="text-align: center;">Products and Shops</h2>
     <div class="col-md-6 dashboard-section">
         <h4>Your favourite shop:</h4>
 
@@ -49,22 +80,6 @@
     </div>
 </div>
 
-<br />
-
-<div class="row">
-    <div class="col-md-6 dashboard-section">
-        @if (Model.RemainingBudget != -1)
-        {
-            <h4>You have</h4>
-            <h1>£@Model.RemainingBudget</h1>
-            <h4>left in your budget.</h4>
-        } else
-                {
-                    <h4>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h4>
-                }
-
-    </div>
-</div>
 
 }
 else

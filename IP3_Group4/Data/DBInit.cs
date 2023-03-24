@@ -19,6 +19,7 @@ namespace IP3_Group4.Data
             context.PaymentTypes.Add(new PaymentType("Card")); // seeds card payment type
             context.PaymentTypes.Add(new PaymentType("Cash")); // seeds cash payment type
             context.PaymentTypes.Add(new PaymentType("GiftCard")); // seeds GiftCard payment type
+            context.PaymentTypes.Add(new PaymentType("Unknown")); // seeds GiftCard payment type
 
             // seeds a sample user
             if (!(context.Users.Any(u => u.UserName == "test@receiptr.com"))) // checks the sample user doesnt already exist

@@ -12,19 +12,39 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                @Html.ActionLink("ReceiptR", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a href="@Url.Action("Index", "Home")" title="Home">
+                    <img alt="ReceiptR" src="@Url.Content("~/Images/logo.png")" class="navbar-image">
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <div class="subnav">
+                        <button class="subnavbtn">Home ▼</button>
+                        <div class="subnav-content">
+                            <a href="@Url.Action("Index", "Home")">Home</a>
+                            <a href="@Url.Action("About", "Home")">About</a>
+                            <a href="@Url.Action("Contact", "Home")">Contact</a>
+                        </div>
+                    </div>
                     @if (User.Identity.IsAuthenticated)
                     {
-                    <li>@Html.ActionLink("Dashboard", "Dashboard", "Stats")</li>
-                    <li>@Html.ActionLink("Stats", "Stats", "Stats")</li>
-                    <li>@Html.ActionLink("Upload Receipt", "UploadReceipt", "Receipt")</li>
-                    <li>@Html.ActionLink("Receipts", "Overview", "Receipt")</li>
-                    }
+                        <div class="subnav">
+                            <button class="subnavbtn">Statistics ▼</button>
+                            <div class="subnav-content">
+                                <a href="@Url.Action("Dashboard", "Stats")">Dashboard</a>
+                                <a href="@Url.Action("Stats", "Stats")">Statistics</a>
+                                <a href="@Url.Action("Budget", "Stats")">Budget</a>
+                            </div>
+                        </div>
 
+                        <div class="subnav">
+                            <button class="subnavbtn">Receipts ▼</button>
+                            <div class="subnav-content">
+                                <a href="@Url.Action("Overview", "Receipt")">Overview</a>
+                                <a href="@Url.Action("UploadReceipt", "Receipt")">Upload</a>
+                            </div>
+                        </div>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
