@@ -11,9 +11,6 @@
     <table class="table">
         <tr>
             <th>
-                Brand
-            </th>
-            <th>
                 Item
             </th>
             <th>
@@ -22,13 +19,13 @@
             <th>
                 Price
             </th>
+            <th>
+                Total Price
+            </th>
         </tr>
 
         @foreach (var item in Model.ProductLines) {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Brand)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ItemName)
                 </td>
@@ -37,6 +34,9 @@
                 </td>
                 <td>
                     £@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    £@Html.DisplayFor(modelItem => item.LineTotal)
                 </td>
             </tr>
             }

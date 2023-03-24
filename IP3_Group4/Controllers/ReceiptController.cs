@@ -60,7 +60,9 @@ namespace IP3_Group4.Controllers
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
 
                     List<ProductLine> productLines = new List<ProductLine>(); // creates List to store the product lines
+                    List<decimal> prices = new List<decimal>();
                     ReceiptTemplate template; // creates ReceiptTemplate object to store the corresponding template
+                    List<int> pricesToSkip = new List<int>();
 
 
                     if (lines.Contains("B&M Retail Ltd")) // checks if receipt from B&M
@@ -88,6 +90,7 @@ namespace IP3_Group4.Controllers
                                 hasProds = true; // tells app it has found the list of products
 
                                 i++; // skips to line after products list start marker
+                                int prodIndex = 0;
                                 do
                                 {
                                     ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
@@ -104,8 +107,17 @@ namespace IP3_Group4.Controllers
                                         pl.Quantity = 1; // sets quantity to 1
                                     }
 
-                                    productLines.Add(pl); // adds ProductLine to receipt object
-                                    
+                                    int foundIndex = productLines.FindIndex(pline => pline.ItemName == pl.ItemName);
+                                    if (foundIndex >= 0)
+                                    {
+                                        productLines[foundIndex].Quantity++;
+                                        pricesToSkip.Add(prodIndex);
+                                    }
+                                    else
+                                    {             
+                                        productLines.Add(pl); // adds ProductLine to receipt object
+                                    }
+                                    prodIndex++;
 
                                 } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
 
@@ -144,21 +156,47 @@ namespace IP3_Group4.Controllers
                                 receipt.PurchaseDate = dt; // sets the receipt DateTime to string just read in
                             }
 
+                            
                             // checks if the line is a price or not, and starts getting prices if they are
                             if (lines[i].ToLower().Contains("£"))
                             {
-                                for (int j = 0; j < productLines.Count; j++) // loops through all read-in products
+                                for (int j = 0; j < productLines.Count + pricesToSkip.Count; j++) // loops through all read-in products
                                 {
-                                    if (productLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
-                                    {
-                                        productLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value                                        
-                                    }
+                                    //if (pricesToSkip.Contains(j))
+                                    //    continue;
+
+                                    //if (productLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
+                                    //{
+                                    //    productLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value                                        
+                                    //}
+
+                                    prices.Add(decimal.Parse(lines[i].Replace(",", ".").Substring(1)));
 
                                     i++; // goes to next scanner line to avoid repetition
                                 }
                                 break; // once prices are read, we dont need anymore info
                             }
                         }
+
+                        foreach (int toSkip in pricesToSkip)
+                        {
+                            prices.RemoveAt(toSkip);
+                        }
+
+                        for (int i = 0; i < productLines.Count; i++)
+                        {
+                            if (productLines[i].Price == 0)
+                                productLines[i].Price = prices[i];
+                        }
+
+                        //for (int i = 0; i < prices.Count; i++)
+                        //{
+                        //    if (!pricesToSkip.Contains(i))
+                        //    {
+                        //        if (productLines[i].Price == 0)
+                        //            productLines[i].Price = prices[i];
+                        //    }
+                        //}
 
                         string id = User.Identity.GetUserId();
                         var user = db.Users.Find(id);

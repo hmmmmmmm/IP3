@@ -5,6 +5,7 @@
 
 .navbar {
     background-color: #0D1B2A;
+    height: fit-content;
 }
 
 .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
@@ -38,7 +39,7 @@
 
 /*#region NAVBAR DROPDOWNS*/
 .navbar-image {
-    height: 50px;
+    height: 51px;
     padding: 0px 10px;
 }
 
