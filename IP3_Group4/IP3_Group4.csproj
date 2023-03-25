@@ -300,6 +300,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\ReceiptR.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -329,7 +330,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Receipt\UploadReceipt.cshtml" />
-    <Content Include="Views\Receipt\EditReceipt.cshtml" />
     <Content Include="Views\Receipt\Overview.cshtml" />
     <Content Include="Views\Stats\Dashboard.cshtml" />
     <Content Include="Views\Stats\Spending.cshtml" />
@@ -339,6 +339,9 @@
     <Content Include="Views\Stats\Shops.cshtml" />
     <Content Include="Views\Shared\_spendingChart.cshtml" />
     <Content Include="Views\Stats\Stats.cshtml" />
+    <Content Include="Views\Receipt\EditReceiptProdLines.cshtml" />
+    <Content Include="Views\Receipt\EditReceipt.cshtml" />
+    <Content Include="Views\Shared\_spendingMonthsComparison.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

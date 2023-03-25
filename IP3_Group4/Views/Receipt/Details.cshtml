@@ -1,45 +1,47 @@
 ﻿@using IP3_Group4.Models;
 @model Receipt
 
-    @{
+@{
         ViewBag.Title = "Details";
         Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+}
 
-    <h2>Details</h2>
+<h2>Details</h2>
 
-    <table class="table">
-        <tr>
-            <th>
-                Item
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Total Price
-            </th>
-        </tr>
+Payment Type: @Html.DisplayFor(model => model.PaymentID)
 
-        @foreach (var item in Model.ProductLines) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ItemName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    £@Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    £@Html.DisplayFor(modelItem => item.LineTotal)
-                </td>
-            </tr>
+<table class="table">
+    <tr>
+        <th>
+            Item
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Total Price
+        </th>
+    </tr>
+
+    @foreach (var item in Model.ProductLines) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            £@Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            £@Html.DisplayFor(modelItem => item.LineTotal)
+        </td>
+    </tr>
             }
-    </table>
+</table>
 
-    <p>@Html.ActionLink("Edit", "EditReceipt", new {id = Model.ID})</p>
+<p>@Html.ActionLink("Edit", "EditReceipt", new {id = Model.ID})</p>

@@ -32,7 +32,7 @@
         <h4>Left to Spend:</h4>
         @if (Model.RemainingBudget != -1)
         {
-        <h1>£@Model.RemainingBudget</h1>
+        <h1>£@Model.RemainingBudget</h1> <p>of</p> <h1>£@Model.TotalBudget</h1>
         <h4>left in your budget.</h4>
         }else
         {

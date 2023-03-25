@@ -9,6 +9,7 @@
         .AddTitle("Shops")
         .AddSeries(
             name: "Shop",
+            chartType: "Pie",
             xValue: Model.Shops.Select(s => s.Shop).ToArray(),
             yValues: Model.Shops.Select(s => s.Visits).ToArray())
         .Write();

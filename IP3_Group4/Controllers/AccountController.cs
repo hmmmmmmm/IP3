@@ -157,9 +157,9 @@ namespace IP3_Group4.Controllers
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.ID);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.ID, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.ID, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     ViewBag.Message = "Welcome to ReceiptR, " + User.Identity.Name;
                     return RedirectToAction("Index", "Home");
@@ -210,9 +210,9 @@ namespace IP3_Group4.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.ID);
+                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.ID, code = code }, protocol: Request.Url.Scheme);		
+                // await UserManager.SendEmailAsync(user.ID, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 

@@ -60,9 +60,9 @@ namespace IP3_Group4.Controllers
                     List<string> lines = response[0].Description.Split('\n').ToList<string>();
 
                     List<ProductLine> productLines = new List<ProductLine>(); // creates List to store the product lines
-                    List<decimal> prices = new List<decimal>();
+                    List<decimal> prices = new List<decimal>(); // creates List to store the prices
                     ReceiptTemplate template; // creates ReceiptTemplate object to store the corresponding template
-                    List<int> pricesToSkip = new List<int>();
+                    List<int> pricesToSkip = new List<int>(); // creates List of price indices to be skipped when liking productlines and prices
 
 
                     if (lines.Contains("B&M Retail Ltd")) // checks if receipt from B&M
@@ -90,7 +90,7 @@ namespace IP3_Group4.Controllers
                                 hasProds = true; // tells app it has found the list of products
 
                                 i++; // skips to line after products list start marker
-                                int prodIndex = 0;
+                                int prodIndex = 0; // the index of which product loop is at
                                 do
                                 {
                                     ProductLine pl = new ProductLine() { ItemName = lines[i] }; // creates ProductLine object to be filled
@@ -107,17 +107,17 @@ namespace IP3_Group4.Controllers
                                         pl.Quantity = 1; // sets quantity to 1
                                     }
 
-                                    int foundIndex = productLines.FindIndex(pline => pline.ItemName == pl.ItemName);
-                                    if (foundIndex >= 0)
+                                    int foundIndex = productLines.FindIndex(pline => pline.ItemName == pl.ItemName); // gets index where a matching ProductLine already exists
+                                    if (foundIndex >= 0) // if a matching productline was found
                                     {
-                                        productLines[foundIndex].Quantity++;
-                                        pricesToSkip.Add(prodIndex);
+                                        productLines[foundIndex].Quantity++; // increases quantity of existing line by one
+                                        pricesToSkip.Add(prodIndex); // adds the index where the price will be to list to tell app to skip that index
                                     }
                                     else
                                     {             
                                         productLines.Add(pl); // adds ProductLine to receipt object
                                     }
-                                    prodIndex++;
+                                    prodIndex++; // increments product index
 
                                 } while (!lines[i].ToLower().Contains(template.ProductEndPrompt)); // checks for end of product list
 
@@ -127,26 +127,22 @@ namespace IP3_Group4.Controllers
                             // checks if next line is the payment method
                             if (template.PaymentTypePrompt != "" && lines[i].ToLower().Contains(template.PaymentTypePrompt))
                             {
-                                i++;
+                                i++; // goes to next line where payment type should be
 
                                 if (lines[i].ToLower().Contains("card") || lines[i].ToLower().Contains("visa") || lines[i].ToLower().Contains("mastercard")) // if payment type is card, deals with it
                                 {
-                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Card");
-                                    receipt.PaymentType = payType;
-                                    receipt.PaymentID = payType.ID;
+                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Card"); // gets corresponding database entry
+                                    receipt.PaymentType = payType; // sets receipt paymenttype object to retrieve object
+                                    receipt.PaymentID = payType.ID; // sets receipt paymenttype id to correct object
                                 }
                                 else if (lines[i].ToLower().Contains("cash")) // if payment type is cash, deals with it
                                 {
-                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Cash");
-                                    receipt.PaymentType = payType;
-                                    receipt.PaymentID = payType.ID;
-                                }
-                                else // if payment type is neither, deals with it
-                                {
-                                    throw new Exception("PaymentType not found");
+                                    PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Cash"); // gets corresponding database entry
+                                    receipt.PaymentType = payType; // sets receipt paymenttype object to retrieve object
+                                    receipt.PaymentID = payType.ID; // sets receipt paymenttype id to correct object
                                 }
 
-                                continue;
+                                continue; // skips to next iteration
                             }
 
                             // checks if next line is the Date/Time of purchase
@@ -162,15 +158,7 @@ namespace IP3_Group4.Controllers
                             {
                                 for (int j = 0; j < productLines.Count + pricesToSkip.Count; j++) // loops through all read-in products
                                 {
-                                    //if (pricesToSkip.Contains(j))
-                                    //    continue;
-
-                                    //if (productLines[j].Price == 0) // checks the ProductLine doesn't already have a price attached
-                                    //{
-                                    //    productLines[j].Price = decimal.Parse(lines[i].Replace(",", ".").Substring(1)); // if no price attached, sets item price to the read-in value                                        
-                                    //}
-
-                                    prices.Add(decimal.Parse(lines[i].Replace(",", ".").Substring(1)));
+                                    prices.Add(decimal.Parse(lines[i].Replace(",", ".").Substring(1))); //adds the price to the list of prices
 
                                     i++; // goes to next scanner line to avoid repetition
                                 }
@@ -178,36 +166,29 @@ namespace IP3_Group4.Controllers
                             }
                         }
 
-                        foreach (int toSkip in pricesToSkip)
+                        int numRemoved = 0; // keeps track of number of prices that have been removed so far
+                        foreach (int toSkip in pricesToSkip) // loops through pricesToSkip and removes corresponding index in prices
                         {
-                            prices.RemoveAt(toSkip);
+                            prices.RemoveAt(toSkip - numRemoved); // removes corresponding index
+                            numRemoved++; // increments the number of removed indeces by one
                         }
 
-                        for (int i = 0; i < productLines.Count; i++)
+                        for (int i = 0; i < productLines.Count; i++) //loops through productlines and attaches prices
                         {
-                            if (productLines[i].Price == 0)
-                                productLines[i].Price = prices[i];
+                            if (productLines[i].Price == 0) // checks the price isnt already assigned
+                                productLines[i].Price = prices[i]; // assigns price to productlines
                         }
 
-                        //for (int i = 0; i < prices.Count; i++)
-                        //{
-                        //    if (!pricesToSkip.Contains(i))
-                        //    {
-                        //        if (productLines[i].Price == 0)
-                        //            productLines[i].Price = prices[i];
-                        //    }
-                        //}
-
-                        string id = User.Identity.GetUserId();
-                        var user = db.Users.Find(id);
+                        string id = User.Identity.GetUserId(); // gets user's id
+                        var user = db.Users.Find(id); // finds user in database
                         receipt.UserID = user.Id; // sets the ID of the user that uploaded the receipt
-                        receipt.User = user;
+                        receipt.User = user; // sets the user object in the receipt
 
-                        if (receipt.PaymentType == null)
+                        if (receipt.PaymentType == null) // sets a payment type in the event none was found
                         {
-                            PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Unknown");
-                            receipt.PaymentType = payType;
-                            receipt.PaymentID = payType.ID;
+                            PaymentType payType = db.PaymentTypes.ToList().First(pt => pt.Type == "Unknown"); // finds "Unknown" paymenttype in database
+                            receipt.PaymentType = payType; // sets receipt paymenttype object to retrieve object
+                            receipt.PaymentID = payType.ID; // sets receipt paymenttype id to correct object
                         }                      
 
                         db.Receipts.Add(receipt); // queues the receipt update to the database
@@ -247,7 +228,7 @@ namespace IP3_Group4.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditReceipt(int? id) // Action for EditReceipt view
+        public ActionResult EditReceiptProdLines(int? id) // Action for EditReceipt view
         {
             //check if id is null
             if (id == null)
@@ -272,10 +253,8 @@ namespace IP3_Group4.Controllers
             return View(receipt); // returns the view with the selected receipt as model
         }
 
-        // public ActionResult Edit([Bind(Include = "ID, CategoryID, Title, Content, PosterID, Poster, DatePosted")] Blog blog)
-
         [HttpPost]
-        public ActionResult EditReceipt(Receipt receipt)
+        public ActionResult EditReceiptProdLines(Receipt receipt)
         {    
             if (ModelState.IsValid)
             {             
@@ -283,17 +262,54 @@ namespace IP3_Group4.Controllers
                 {
                     db.ProductLine.AddOrUpdate(line);
                 }
-
-                //db.Entry(receipt).State = EntityState.Modified;
-
-                //foreach (ProductLine line in receipt.ProductLines)
-                //{
-                //    db.Entry(line).State = EntityState.Modified;
-                //}
                 
                 db.SaveChanges();
+                return RedirectToAction("EditReceipt", new { id = receipt.ID });
+            }
+
+            return View(receipt);
+        }
+
+        [HttpGet]
+        public ActionResult EditReceipt(int? id) // Action for EditReceipt view
+        {
+            //check if id is null
+            if (id == null)
+            {
+                //return badrequest
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            //load the given receipt
+            Receipt receipt = db.Receipts.Find(id);
+
+            //check if the blog is null
+            if (receipt == null)
+            {
+                //return http not found
+                return HttpNotFound();
+            }
+            ViewBag.PaymentID = new SelectList(db.PaymentTypes, "ID", "Type");
+
+            return View(receipt); // returns the view with the selected receipt as model
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult EditReceipt([Bind(Include = "ID, Shop, PurchaseDate, UserID, PaymentID")] Receipt receipt)
+        {
+            if (ModelState.IsValid)
+            {
+                receipt.PaymentType = db.PaymentTypes.Find(receipt.PaymentID);
+                receipt.User = db.Users.Find(receipt.UserID);
+                receipt.ProductLines = db.ProductLine.Where(r => r.ReceiptID == receipt.ID).ToList();
+
+                db.Receipts.AddOrUpdate(receipt);               
+                db.SaveChanges();
+
                 return RedirectToAction("Overview");
             }
+
+            ViewBag.PaymentID = new SelectList(db.PaymentTypes, "ID", "Type");
 
             return View(receipt);
         }
@@ -311,7 +327,11 @@ namespace IP3_Group4.Controllers
 
         public ActionResult Details(Receipt receipt)
         {
+            receipt = db.Receipts.Find(receipt.ID);
             receipt.ProductLines = db.ProductLine.Where(pl => pl.ReceiptID == receipt.ID).ToList();
+            receipt.PaymentType = db.PaymentTypes.Find(receipt.PaymentID);
+            receipt.User = db.Users.Find(receipt.UserID);
+
             return View(receipt);
         }
 
@@ -325,6 +345,19 @@ namespace IP3_Group4.Controllers
 
             ViewBag.Message = "Receipt deleted successfully!";
             return RedirectToAction("Overview");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteProdLine(int id)
+        {
+            ProductLine productLine = db.ProductLine.Find(id);
+            int receiptID = productLine.ReceiptID;
+
+            db.ProductLine.Remove(productLine);
+            db.SaveChanges();
+
+            ViewBag.Message = "Receipt deleted successfully!";
+            return RedirectToAction("EditReceiptProdLines", new { id = receiptID });
         }
     }
 }

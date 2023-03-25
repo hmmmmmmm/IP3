@@ -1,58 +1,57 @@
 ﻿@model IP3_Group4.Models.Receipt
 
 @{
-    ViewBag.Title = "EditReceipt";
+    ViewBag.Title = "Edit Receipt";
 }
 
-<h2>EditReceipt</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
- {
-@Html.AntiForgeryToken()
+{
+    @Html.AntiForgeryToken()
 
-<table class="form-horizontal">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
-    @Html.HiddenFor(model => model.PurchaseDate)
-    @Html.HiddenFor(model => model.PaymentID)
-    @Html.HiddenFor(model => model.Shop)
-    @Html.HiddenFor(model => model.UserID)
+    <table class="table">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.UserID)
 
-
-    @for (int i = 0; i < Model.ProductLines.Count(); i++)
-    {
-        @Html.HiddenFor(model => model.ProductLines[i].ID)
-        @Html.HiddenFor(model => model.ProductLines[i].Brand)
-        @Html.HiddenFor(model => model.ProductLines[i].ReceiptID)
         <tr>
-            <td>@Html.LabelFor(model => model.ProductLines[i].ItemName, htmlAttributes: new { @class = "control-label col-md-2" })</td>
-            <td>
-                @Html.EditorFor(model => model.ProductLines[i].ItemName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProductLines[i].ItemName, "", new { @class = "text-danger" })
-            </td>
+            <th>Purchase Date</th>
+            <th>Payment Type</th>
+            <th>Shop</th>
+            <th>Product Lines</th>
         </tr>
 
         <tr>
-            <td>@Html.LabelFor(model => model.ProductLines[i].Quantity, htmlAttributes: new { @class = "control-label col-md-2" })</td>
             <td>
-                @Html.EditorFor(model => model.ProductLines[i].Quantity, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProductLines[i].Quantity, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PurchaseDate, "", new { @class = "text-danger" })
+            </td>
+
+
+            <td>
+                @Html.DropDownList("PaymentID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PaymentID, "", new { @class = "text-danger" })
+            </td>
+
+
+            <td>
+                @Html.EditorFor(model => model.Shop, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Shop, "", new { @class = "text-danger" })
+            </td>
+            <td>
+                <div class="flex-parent">
+                    <div class="buttons-parent">
+                        @Html.ActionLink("Edit Product Lines", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+                    </div>
+                </div>
             </td>
         </tr>
 
-        <tr>
-            <td>@Html.LabelFor(model => model.ProductLines[i].Price, htmlAttributes: new { @class = "control-label col-md-2" })</td>
-            <td>
-                @Html.EditorFor(model => model.ProductLines[i].Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProductLines[i].Price, "", new { @class = "text-danger" })
-            </td>
-        </tr>
-    }
-
-    <tr><td><input type="submit" value="Save" class="btn btn-default" /></td></tr>
-</table>
+        <tr><td><input type="submit" value="Save" class="btn btn-success" /></td></tr>
+    </table>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Receipts", "Overview")
 </div>
