@@ -1,0 +1,22 @@
+﻿@using IP3_Group4.Models
+@model List<MonthlyReceipts>
+
+@{
+    var myChart = new Chart(width: 1000, height: 400, theme: ChartTheme.Blue)
+            .AddTitle("Spending")
+            .AddSeries(
+                name: "This Month",
+                chartType: "Line",
+                xValue: Model[0].DaysInMonth,
+                yValues: Model[0].DailyReceipts.Select(s => s.Spent).ToArray())
+            .AddSeries(
+                name: "Last Month",
+                chartType: "Line",
+                xValue: Model[1].DaysInMonth,
+                yValues: Model[1].DailyReceipts.Select(s => s.Spent).ToArray())
+            .AddLegend("Legend")
+            .Write();
+}
+
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>

@@ -4,6 +4,21 @@
     ViewBag.Title = "Budget";
 }
 
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+@section scripts {
+    <script src="~/Scripts/jquery-ui-1.13.2.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "dd-mm-yy",
+                changemonth: true,
+                changeyear: true
+            });
+        });
+    </script>
+}
+
 <h2>Your Budget</h2>
 
 @if (User.Identity.IsAuthenticated)
@@ -19,18 +34,20 @@
                 <div class="alert alert-success">
                     @ViewBag.Message
                 </div>
-            } else {
+            }
+            else
+            {
                 <div class="alert alert-danger">
                     @ViewBag.Message
                 </div>
             }
-        
+
         }
 
         @Html.HiddenFor(model => model.ID)
         @Html.HiddenFor(model => model.LastReset)
         @Html.HiddenFor(model => model.NextReset)
-        
+
         <div class="form-group">
             @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
@@ -43,7 +60,12 @@
                 @Html.TextBoxFor(m => m.ResetPeriod, new { @class = "form-control" })
             </div>
         </div>
-
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastReset, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.LastReset, new { @class = "form-control" })
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" class="btn btn-default" value="Save Budget" />
@@ -51,13 +73,35 @@
         </div>
     }
 
-<hr />  
+    <hr />
 
     if (Model != null && Model.Analytics != null)
     {
-        <p>You have £@Model.Analytics.Remaining left in your budget.</p>
-        <p>At the current rate of spending, you will have spent @Model.Analytics.TargetPercentage% of your budget by @Model.NextReset.ToString("dd/MM/yyyy")</p>
-        <p>There are @Model.Analytics.DaysLeft days left before your budget resets.</p>        
+        <div class="flex-row">
+            <div class="col-md dashboard-section">
+                <h4>You have</h4>
+                <h1>£@Model.Analytics.Remaining</h1>
+                <h4>left to spend this period.</h4>
+            </div>
+
+            <div class="col-md dashboard-section">
+                <h4>You will use</h4>
+                @if (Model.Analytics.TargetPercentage < 95) {
+                    <h1 style="color: forestgreen">@Model.Analytics.TargetPercentage%</h1>
+                } else if (Model.Analytics.TargetPercentage < 105) {
+                    <h1 style="color: gold">@Model.Analytics.TargetPercentage%</h1>
+                } else {
+                    <h1 style="color: red">@Model.Analytics.TargetPercentage%</h1>
+                }
+                <h4>of your budget by @Model.NextReset.ToString("dd/MM/yyyy").</h4>
+            </div>
+
+            <div class="col-md dashboard-section">
+                <h4>You have</h4>
+                <h1>@Model.Analytics.DaysLeft</h1>
+                <h4>days left in this budget period.</h4>
+            </div>
+        </div>
     }
 }
 else

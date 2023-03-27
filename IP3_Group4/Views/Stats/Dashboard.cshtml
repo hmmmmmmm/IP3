@@ -10,53 +10,53 @@
 {
 <p>All your ReceiptR information on one page.</p>
 <hr />
-
+<h2 style="text-align: center;">Spending Overview</h2>
+if (Model.AllReceipts != null)
+{
 <div class="row">
-    <h2 style="text-align: center;">Spending Overview</h2>
     <div class="col-md-6 dashboard-section">
         <h4>This week, you spent:</h4>
         <h1>£@Model.WeekTotal</h1>
     </div>
 
-    <div class="col-md-offset-6 dashboard-section">
+    <div class="col-md dashboard-section">
         <h4>This month, you spent:</h4>
         <h1>£@Model.MonthTotal</h1>
     </div>
 </div>
+}
+else {
+<h3 style="text-align: center;">You haven't uploaded any receipts yet, but you can do that @Html.ActionLink("here!", "UploadReceipt", "Receipt")</h3>
+}
+
 
 <hr />
-
-<div class="row">
-    <h2 style="text-align: center;">Your Budget</h2>
-    <div class="col-md-6 dashboard-section">
+<h2 style="text-align: center;">Your Budget</h2>
+if (Model.RemainingBudget != -1){
+<div class="flex-row">
+    <div class="col-md dashboard-section">
         <h4>Left to Spend:</h4>
-        @if (Model.RemainingBudget != -1)
-        {
-        <h1>£@Model.RemainingBudget</h1> <p>of</p> <h1>£@Model.TotalBudget</h1>
-        <h4>left in your budget.</h4>
-        }else
-        {
-        <h1>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h1>
-        }
+        <h1>£@Model.RemainingBudget</h1>
     </div>
 
-    <div class="col-md-offset-6 dashboard-section">
+    <div class="col-md dashboard-section">
+        <h4>Budget Total:</h4>
+        <h1>@Model.TotalBudget</h1>
+    </div>
 
+    <div class="col-md dashboard-section">
         <h4>Days Left:</h4>
-        @if (Model.RemainingBudget != -1)
-        {
+
         <h1>@Model.DaysLeftInBudget</h1>
-        }else
-        {
-        <h1>You haven't set up a budget yet. You can do that @Html.ActionLink("here.", "Budget")</h1>
-        }
     </div>
 </div>
+} else {
+<h3 style="text-align: center;">You haven't set up a budget yet, but you can do that @Html.ActionLink("here!", "Budget")</h3>
+}
 
 <hr />
-
+<h2 style="text-align: center;">Products and Shops</h2>
 <div class="row">
-    <h2 style="text-align: center;">Products and Shops</h2>
     <div class="col-md-6 dashboard-section">
         <h4>Your favourite shop:</h4>
 
@@ -68,7 +68,7 @@
 
     </div>
 
-    <div class="col-md-offset-6 dashboard-section">
+    <div class="col-md dashboard-section">
         <!-- Section is link to Spending page -->
 
         <h4>Your most bought product is:</h4>

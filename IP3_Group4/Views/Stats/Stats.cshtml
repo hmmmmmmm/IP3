@@ -1,25 +1,29 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Stats";
 }
 
 <h2>Stats</h2>
 
-<div class="row">
-    <div class="col-md-6">
-        <h4>The shops you've visited:</h4>
-        <img width="550" height="350" src='@Url.Action("Shops", "Stats")' alt="Chart" />
+@if (ViewBag.HasReceipts == true) {
+    <div class="row">
+        <div class="col-md-6">
+            <h4>The shops you've visited:</h4>
+            <img width="550" height="400" src='@Url.Action("Shops", "Stats")' alt="Chart" />
+        </div>
+
+        <div class="col-md-offset-6">
+            <h4>What you spent money on:</h4>
+            <img width="550" height="400" src='@Url.Action("ProductsBought", "Stats")' alt="Chart" />
+        </div>
     </div>
 
-    <div class="col-md-offset-6">
-        <h4>What you spent money on:</h4>
-        <img width="550" height="350" src='@Url.Action("Spending", "Stats")' alt="Chart" />
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Your spending this month versus last month:</h4>
+            <img width="1000" height="400" src='@Url.Action("SpendingComparison", "Stats")' alt="Chart" />
+        </div>
     </div>
-</div>
+} else {
+    <h3>Scan some receipts to see this page!</h3>
+}
 
-<div class="row">
-    <div class="col-md-6">
-        <h4>Your spending this month versus last month:</h4>
-
-    </div>
-</div>

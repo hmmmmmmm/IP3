@@ -1,10 +1,12 @@
 ﻿using IP3_Group4.Data;
 using IP3_Group4.Models;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web.Mvc;
 
 namespace IP3_Group4.Controllers
@@ -24,8 +26,14 @@ namespace IP3_Group4.Controllers
 
         public ActionResult Stats() // Action for Spending page
         {
-            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
-            return View(analytics); // returns the View
+            ViewBag.HasReceipts = false;
+
+            if (GetUsersReceipts().Count > 0)
+            {
+                ViewBag.HasReceipts = true;
+            } 
+
+            return View();
         }
 
         [HttpGet]
@@ -79,10 +87,16 @@ namespace IP3_Group4.Controllers
             return View(analytics); // returns the View
         }
 
-        public ActionResult Spending() // Action for Spending page
+        public ActionResult ProductsBought() // Action for Spending page
         {
             analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
             return View(analytics); // returns the View
+        }
+
+        public ActionResult SpendingComparison()
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget());
+            return View(analytics.MonthlyReceipts);
         }
 
 

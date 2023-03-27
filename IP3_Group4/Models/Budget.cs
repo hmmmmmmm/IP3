@@ -14,7 +14,7 @@ namespace IP3_Group4.Models
         public decimal Amount { get; set; } // amount allowed for budget
         [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime NextReset { get; set; } // date of when budget will next reset
-        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DataType(DataType.DateTime), DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}"), Display(Name = "Last Reset Date")]
         public DateTime LastReset { get; set; } // date of when budget was last reset
         [Display(Name = "Reset Period")]
         public int ResetPeriod { get; set; } // how many days after LastReset should the budget reset?

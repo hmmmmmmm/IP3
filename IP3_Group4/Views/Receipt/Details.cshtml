@@ -8,12 +8,51 @@
 
 <h2>Details</h2>
 
-Payment Type: @Html.DisplayFor(model => model.PaymentID)
+<table class="table">
+    <tr>
+        <th>
+            Shop
+        </th>
+        <th>
+            Total Price
+        </th>
+        <th>
+            Purchase Date
+        </th>
+        <th>
+            Payment Type
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.Shop)
+        </td>
+        <td>
+            £@Html.DisplayFor(model => model.TotalPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PurchaseDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PaymentType.Type)
+        </td>
+    </tr>
+</table>
+
+<div class="flex-button">
+    @Html.ActionLink("Edit", "EditReceipt", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+</div>
+
+<hr />
+<h3>Products</h3>
 
 <table class="table">
     <tr>
         <th>
             Item
+        </th>
+        <th>
+            Brand
         </th>
         <th>
             Quantity
@@ -32,6 +71,9 @@ Payment Type: @Html.DisplayFor(model => model.PaymentID)
             @Html.DisplayFor(modelItem => item.ItemName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Brand)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Quantity)
         </td>
         <td>
@@ -44,4 +86,6 @@ Payment Type: @Html.DisplayFor(model => model.PaymentID)
             }
 </table>
 
-<p>@Html.ActionLink("Edit", "EditReceipt", new {id = Model.ID})</p>
+<div class="flex-button">
+    @Html.ActionLink("Edit Products", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+</div>

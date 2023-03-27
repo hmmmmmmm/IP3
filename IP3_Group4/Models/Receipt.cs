@@ -136,10 +136,10 @@ namespace IP3_Group4.Models
         public ProductLine()
         {
             this.ID = 0; // sets id
-            this.ItemName = ""; // sets items name
+            this.ItemName = "New Product"; // sets items name
             this.Brand = ""; // sets items brand
-            this.Quantity = 0; // sets items quantity
-            this.Price = 0; // sets items price
+            this.Quantity = 1; // sets items quantity
+            this.Price = 1.00M; // sets items price
         }
 
         #region Receipt Properties

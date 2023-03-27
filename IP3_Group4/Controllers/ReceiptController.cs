@@ -359,5 +359,22 @@ namespace IP3_Group4.Controllers
             ViewBag.Message = "Receipt deleted successfully!";
             return RedirectToAction("EditReceiptProdLines", new { id = receiptID });
         }
+
+        [HttpPost]
+        public ActionResult AddProductLine(int id)
+        {
+            Receipt receipt = db.Receipts.FirstOrDefault(r => r.ID == id);
+            ProductLine prodLine = new ProductLine
+            {
+                Receipt = receipt,
+                ReceiptID = receipt.ID
+            };
+
+            db.ProductLine.Add(prodLine);
+            db.SaveChanges();
+
+            ViewBag.Message = "Receipt deleted successfully!";
+            return RedirectToAction("EditReceiptProductLine", "Receipt", new { id = receipt.ID });
+        }
     }
 }

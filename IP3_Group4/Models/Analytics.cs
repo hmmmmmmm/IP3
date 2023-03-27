@@ -13,20 +13,22 @@ namespace IP3_Group4.Models
         public decimal MonthTotal { get; set; } // Total spent by user over one month
         public List<ShopCounter> Shops { get; set; } // Stores the shops the shops the user has shopped at
         public List<ProductCounter> Products { get; set; } // Stores the products the user has bought
-        public Receipt LastReceipt { get; set; } // Stores the last receipt scanned by user
+        public List<MonthlyReceipts> MonthlyReceipts { get; set; }
+        public List<Receipt> AllReceipts { get; set; }
         public decimal RemainingBudget { get; set; } // Amount left in the budget after deducting total of all user's receipts
         public decimal TotalBudget { get; set; }
         public int DaysLeftInBudget { get; set; } = 0; // number of days left in the budget
+        public decimal SpentLastMonth { get; set; }
 
 
         public Analytics(List<Receipt> receipts, Budget budge)
         {
             if (receipts.Any()) // checks user has actually scanned a receipt
             {
+                AllReceipts = receipts;
                 WeekTotal = 0;
                 MonthTotal = 0;
 
-                LastReceipt = receipts.Last(); // gets the latest receipt
                 DateTime weekStart = DateTime.Now.AddDays(-7); // gets date of 7 days ago
                 DateTime monthStart = DateTime.Now.AddDays(-30); // gets date of 30 days ago
 
@@ -44,25 +46,25 @@ namespace IP3_Group4.Models
                 {
                     RemainingBudget = -1;
                 }
-                    
+
 
                 foreach (Receipt r in receipts) // loops through all user's receipts
                 {
                     if (r.PurchaseDate >= monthStart) // checks if the receipt was printed within the last 30 days
                     {
                         MonthTotal += r.TotalPrice; // if yes, adds that to the total spent across the month
- 
+
                         if (r.PurchaseDate >= weekStart) // checks if receipt was printed within the last week
                         {
                             WeekTotal += r.TotalPrice; // if yes, adds that to the total spent across the week
                         }
                     }
+
                     if (budge != null && r.PurchaseDate.Date >= budge.LastReset.Date) // checks budget isnt null again and checks receipt was printed since last reset
                     {
                         RemainingBudget -= r.TotalPrice; // subtracts receipt's amount from amount left in budget
                     }
-                        
-                    
+
 
                     int sIndex = shops.FindIndex(s => s.Shop == r.Shop); // tries to locate the shop the receipt was bought from within list of shops
                     if (sIndex >= 0) // if the shop has already been added to the list of shops
@@ -82,9 +84,29 @@ namespace IP3_Group4.Models
                     }
                 }
 
+                MonthlyReceipts = new List<MonthlyReceipts>();
+                DateTime startPeriod = DateTime.Now.AddYears(-1);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    List<Receipt> thisMonthsReceipts = new List<Receipt>();
+                    DateTime currentMonthStart = startPeriod.AddMonths(i + 1);
+                    foreach (Receipt r in AllReceipts)
+                    {
+                        if (r.PurchaseDate.Month == currentMonthStart.Month)
+                        {
+                            thisMonthsReceipts.Add(r);
+                        }
+                    }
+
+                    MonthlyReceipts.Add(new MonthlyReceipts(startPeriod.AddMonths(i + 1), thisMonthsReceipts));
+                }
+
+                MonthlyReceipts.Reverse();
+
                 Shops = shops.OrderBy(s => s.Visits).ToList(); // orders the shops by least to most popular
                 Shops.Reverse();
-                
+
 
                 if (products.Count != 0) // checks if any products have been found
                 {
@@ -94,12 +116,14 @@ namespace IP3_Group4.Models
                     foreach (ProductCounter pc in products) // loops through each product found
                         pc.GetPercentOfBought(totalProds); // calculates what percentage of the total bought products this product is
                 }
+
             }
             else // if there are no receipts scanned in
             {
                 Shops = new List<ShopCounter> { new ShopCounter("No shops visited yet...", 0) }; // creates dummy ShopCounter
                 Products = new List<ProductCounter> { new ProductCounter("No products bought yet...", 0) }; // creates dummy ProductCounter
                 MonthTotal = 0; WeekTotal = 0; // sets week and month totals to 0
+                RemainingBudget = -1;
             }
         }
     }
@@ -137,7 +161,7 @@ namespace IP3_Group4.Models
         }
         public void GetPercentOfBought(int totalProds) // calculates the percentage of products bought this product is
         {
-            PercentageOfItemsBought = Math.Round((double) Buys / totalProds, 2); // does the maths and rounds to two decimal places
+            PercentageOfItemsBought = Math.Round((double)Buys / totalProds, 2); // does the maths and rounds to two decimal places
         }
     }
 }
