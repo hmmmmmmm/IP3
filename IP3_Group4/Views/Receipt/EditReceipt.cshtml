@@ -8,7 +8,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    @using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
 
@@ -51,10 +51,6 @@
             <tr><td><input type="submit" value="Save" class="btn btn-success" /></td></tr>
         </table>
     }
-
-    <div>
-        @Html.ActionLink("Back to Receipts", "Overview")
-    </div>
 }
 else
 {

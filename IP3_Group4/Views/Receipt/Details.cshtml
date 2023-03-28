@@ -41,9 +41,7 @@
         </tr>
     </table>
 
-    <div class="flex-button">
         @Html.ActionLink("Edit", "EditReceipt", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
-    </div>
 
     <hr />
     <h3>Products</h3>
@@ -88,10 +86,7 @@
             </tr>
         }
     </table>
-
-    <div class="flex-button">
         @Html.ActionLink("Edit Products", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
-    </div>
 }
 else
 {

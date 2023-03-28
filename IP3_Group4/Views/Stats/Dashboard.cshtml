@@ -8,7 +8,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-<p>All your ReceiptR information on one page.</p>
+<p>A quick look at your ReceiptR stats.</p>
 <hr />
 <h2 style="text-align: center;">Spending Overview</h2>
 if (Model.AllReceipts != null)
@@ -41,7 +41,7 @@ if (Model.RemainingBudget != -1){
 
     <div class="col-md dashboard-section">
         <h4>Budget Total:</h4>
-        <h1>@Model.TotalBudget</h1>
+        <h1>£@Model.TotalBudget</h1>
     </div>
 
     <div class="col-md dashboard-section">

@@ -1,10 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
 <div class="jumbotron">
     <h1>ReceiptR</h1>
-    <p class="lead">ReceiptR is a new way to track your spending in supermarkets, cinemas and more. @Html.ActionLink("Sign up here!", "Register", "Account")</p>
+    <p class="lead">ReceiptR is a new way to track your spending in supermarkets, cinemas and more. @if (!User.Identity.IsAuthenticated)
+    {@Html.ActionLink("Sign up here!", "Register", "Account")}</p>
 </div>
 
 @if (ViewBag.Message != null)
@@ -22,14 +23,15 @@
             Follow these simple steps to get started with ReceiptR today!
 
             <ol>
-                @if (!User.Identity.IsAuthenticated) {
+                @if (!User.Identity.IsAuthenticated)
+                {
                     <li>Create an account @Html.ActionLink("here", "Register", "Account").</li>
                 }
                 <li>Go to Receipts > Upload.</li>
                 <li>Upload a receipt!</li>
             </ol>
 
-            You can view all the information from your scanned receipts via the @Html.ActionLink("dashboard", "Dashboard", "Stats").
+            You can view all the information from your scanned receipts @Html.ActionLink("here", "Overview", "Receipt"). For a quick overview, go to the @Html.ActionLink("dashboard", "Dashboard", "Stats"). Still not enough information? Head on over to the @Html.ActionLink("statistics page", "Stats", "Stats")!
         </p>
     </div>
 

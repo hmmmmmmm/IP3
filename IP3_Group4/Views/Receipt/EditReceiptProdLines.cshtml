@@ -8,7 +8,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    @using (Html.BeginForm("EditReceiptProdLines", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    using (Html.BeginForm("EditReceiptProdLines", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
 
@@ -129,10 +129,6 @@
             </tr>
         </table>
     }
-
-    <div>
-        @Html.ActionLink("Back to Receipts", "Overview")
-    </div>
 }
 else
 {
