@@ -4,130 +4,139 @@
     ViewBag.Title = "Edit Product Lines";
 }
 
-<h2>@ViewBag.Title for Receipt @Model.ID</h2>
+<h2>Edit Product Lines</h2>
 
-@using (Html.BeginForm("EditReceiptProdLines", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
- {
-@Html.AntiForgeryToken()
-
-<table class="table">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
-    @Html.HiddenFor(model => model.PurchaseDate)
-    @Html.HiddenFor(model => model.PaymentID)
-    @Html.HiddenFor(model => model.Shop)
-    @Html.HiddenFor(model => model.UserID)
-
-    <tr>
-        <th>Product Name</th>
-        <th>Brand</th>
-        <th>Quantity</th>
-        <th>Price per Item (£)</th>
-        <th></th>
-    </tr>
-    @for (int i = 0; i < Model.ProductLines.Count(); i++)
+@if (User.Identity.IsAuthenticated)
+{
+    @using (Html.BeginForm("EditReceiptProdLines", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
-    @Html.HiddenFor(model => model.ProductLines[i].ID)
-    @Html.HiddenFor(model => model.ProductLines[i].ReceiptID)
+        @Html.AntiForgeryToken()
 
-<tr>
-    <td>
-        @Html.EditorFor(model => model.ProductLines[i].ItemName, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProductLines[i].ItemName, "", new { @class = "text-danger" })
-    </td>
+        <table class="table">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.PurchaseDate)
+            @Html.HiddenFor(model => model.PaymentID)
+            @Html.HiddenFor(model => model.Shop)
+            @Html.HiddenFor(model => model.UserID)
 
-    <td>
-        @Html.EditorFor(model => model.ProductLines[i].Brand, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProductLines[i].Brand, "", new { @class = "text-danger" })
-    </td>
+            <tr>
+                <th>Product Name</th>
+                <th>Brand</th>
+                <th>Quantity</th>
+                <th>Price per Item (£)</th>
+                <th></th>
+            </tr>
+            @for (int i = 0; i < Model.ProductLines.Count(); i++)
+            {
+                @Html.HiddenFor(model => model.ProductLines[i].ID)
+                @Html.HiddenFor(model => model.ProductLines[i].ReceiptID)
 
-    <td>
-        @Html.EditorFor(model => model.ProductLines[i].Quantity, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProductLines[i].Quantity, "", new { @class = "text-danger" })
-    </td>
+                <tr>
+                    <td>
+                        @Html.EditorFor(model => model.ProductLines[i].ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProductLines[i].ItemName, "", new { @class = "text-danger" })
+                    </td>
+
+                    <td>
+                        @Html.EditorFor(model => model.ProductLines[i].Brand, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProductLines[i].Brand, "", new { @class = "text-danger" })
+                    </td>
+
+                    <td>
+                        @Html.EditorFor(model => model.ProductLines[i].Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProductLines[i].Quantity, "", new { @class = "text-danger" })
+                    </td>
 
 
-    <td>
-        @Html.EditorFor(model => model.ProductLines[i].Price, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ProductLines[i].Price, "", new { @class = "text-danger" })
-    </td>
-    <td>
-        <div class="flex-parent">
-            <div class="buttons-parent">
-                @using (Html.BeginForm("DeleteProdLine", "Receipt", new { id = Model.ProductLines[i].ID }))
-                        {
-                        var deleteProdLineModal = $"deleteProdLineModal{Model.ProductLines[i].ID}";
+                    <td>
+                        @Html.EditorFor(model => model.ProductLines[i].Price, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProductLines[i].Price, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        <div class="flex-parent">
+                            <div class="buttons-parent">
+                                @using (Html.BeginForm("DeleteProdLine", "Receipt", new { id = Model.ProductLines[i].ID }))
+                                {
+                                    var deleteProdLineModal = $"deleteProdLineModal{Model.ProductLines[i].ID}";
 
-                <div class="flex-button">
-                    <a href="#" data-toggle="modal" data-target="#@deleteProdLineModal" class="btn btn-danger">Delete Product</a>
-                </div>
+                                    <div class="flex-button">
+                                        <a href="#" data-toggle="modal" data-target="#@deleteProdLineModal" class="btn btn-danger">Delete Product</a>
+                                    </div>
 
-                <div class="modal fade" id="@deleteProdLineModal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title text-left">Delete Confirmation</h4>
-                            </div>
-                            <div class="modal-body text-center">
-                                <strong>Delete product line @Model.ProductLines[i].ID?</strong>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
-                                <input type="submit" value="Delete" id="btnContinueDelete" class="btn btn-success" />
+                                    <div class="modal fade" id="@deleteProdLineModal" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-primary">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <h4 class="modal-title text-left">Delete Confirmation</h4>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <strong>Delete product line @Model.ProductLines[i].ID?</strong>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                                                    <input type="submit" value="Delete" id="btnContinueDelete" class="btn btn-success" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
-                    </div>
-                </div>
-                        }
-            </div>
-        </div>
-    </td>
-</tr>
-    }
+                    </td>
+                </tr>
+            }
 
-    <tr>
-        <td class="td-flex">
-            <input type="submit" value="Save" class="btn btn-success" />
+            <tr>
+                <td class="td-flex">
+                    <input type="submit" value="Save" class="btn btn-success" />
 
 
 
-            @using (Html.BeginForm("AddProductLine", "Receipt", new { id = @Model.ID }))
-                        {
+                    @using (Html.BeginForm("AddProductLine", "Receipt", new { id = @Model.ID }))
+                    {
                         var addProductLineModal = $"addProductLineModal{@Model.ID}";
 
-            <div class="flex-button">
-                <a href="#" data-toggle="modal" data-target="#@addProductLineModal" class="btn btn-warning">Add Product</a>
-            </div>
+                        <div class="flex-button">
+                            <a href="#" data-toggle="modal" data-target="#@addProductLineModal" class="btn btn-warning">Add Product</a>
+                        </div>
 
-            <div class="modal fade" id="@addProductLineModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header bg-primary">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title text-left">Add Confirmation</h4>
+                        <div class="modal fade" id="@addProductLineModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title text-left">Add Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <strong>Add product line?</strong>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                                        <input type="submit" value="Add New" id="btnContinueAdd" class="btn btn-success" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body text-center">
-                            <strong>Add product line?</strong>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
-                            <input type="submit" value="Add New" id="btnContinueAdd" class="btn btn-success" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-                        }
+                    }
 
-        </td>
-    </tr>
-</table>
+                </td>
+            </tr>
+        </table>
+    }
+
+    <div>
+        @Html.ActionLink("Back to Receipts", "Overview")
+    </div>
+}
+else
+{
+    <h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
 }
 
-<div>
-    @Html.ActionLink("Back to Receipts", "Overview")
-</div>
+

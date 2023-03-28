@@ -5,11 +5,11 @@
 }
 
 @{
-    var myChart = new Chart(width: 600, height: 400)
-        .AddTitle("Spending")
+    var myChart = new Chart(width: 550, height: 400, themePath: "/Content/ChartFormatter.xml")
+        .AddTitle("Products")
         .AddSeries(
             name: "Items",
-            xValue: Model.Products.Select(p => p.Product).ToArray(),
-            yValues: Model.Products.Select(p => p.Buys).ToArray())
+            xValue: Model.Products.Select(p => p.Product).Take(5).ToArray(),
+            yValues: Model.Products.Select(p => p.Buys).Take(5).ToArray())
         .Write();
 }

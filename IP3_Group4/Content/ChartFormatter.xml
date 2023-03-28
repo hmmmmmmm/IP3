@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Chart>
+	<Titles>
+		<Title Name="Title1" ForeColor="#0D1B2A"  Font="Trebuchet MS, 16pt"></Title>
+	</Titles>
+</Chart>

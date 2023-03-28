@@ -2,7 +2,7 @@
 @model List<MonthlyReceipts>
 
 @{
-    var myChart = new Chart(width: 1000, height: 400, theme: ChartTheme.Blue)
+    var myChart = new Chart(width: 1000, height: 400, themePath: "/Content/ChartFormatter.xml")
             .AddTitle("Spending")
             .AddSeries(
                 name: "This Month",

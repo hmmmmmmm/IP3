@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<IP3_Group4.Models.Receipt>
-    @using IP3_Group4.Data
+@using IP3_Group4.Data
 
-    @{
+@{
     ViewBag.Title = "Overview";
-    }
+}
 
-    @if (User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated)
 {
 
     <h2>Overview</h2>
@@ -82,7 +82,5 @@
 }
 else
 {
-    <div class="alert alert-danger">
-        <p>You must be logged in to view this page.</p>
-    </div>
+<h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
 }

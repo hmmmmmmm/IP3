@@ -1,0 +1,37 @@
+﻿@using IP3_Group4.Models
+@model List<ProductCounter>
+
+<h2>All Purchased Products</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>An overview of all the products you have bought.</p>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>Product</th>
+            <th>Total Bought</th>
+            <th>Percentage of All Products Bought</th>
+            <th>Price per Product</th>
+            <th>Total Spent on Product</th>
+        </tr>
+
+        @foreach (ProductCounter item in Model)
+        {
+            <tr>
+                <td>@item.Product</td>
+                <td>@item.Buys</td>
+                <td>@item.PercentageOfItemsBought%</td>
+                <td>£@item.ItemPrice</td>
+                <td>£@item.TotalSpent</td>
+            </tr>
+        }
+
+    </table>
+}
+else
+{
+<h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
+}
+
+

@@ -282,6 +282,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ChartFormatter.xml" />
     <Content Include="Content\receiptr.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -387,6 +388,8 @@
     <Content Include="Views\Receipt\EditReceipt.cshtml" />
     <Content Include="Views\Stats\SpendingComparison.cshtml" />
     <Content Include="Views\Shared\_spendingComp.cshtml" />
+    <Content Include="Views\Stats\AllShopDetails.cshtml" />
+    <Content Include="Views\Stats\AllProductDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

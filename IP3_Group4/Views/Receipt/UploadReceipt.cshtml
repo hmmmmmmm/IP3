@@ -2,23 +2,30 @@
     ViewBag.Title = "Upload Receipt";
 }
 <h2>Upload Receipt</h2>
-@using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@if (User.Identity.IsAuthenticated)
 {
-    if (ViewBag.Successful == "y")
+    @using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <div class="alert alert-success">Receipt uploaded successfully!</div>
-    }
-    else if (ViewBag.Successful == "n")
-    {
-        <div class="alert alert-danger">Receipt upload failed.</div>
-    }
-    else if (ViewBag.Successful == "f")
-    {
-        <div class="alert alert-danger">File must be a in the format ".png", ".jpg" or ".jpeg"!</div>
-    }
+        if (ViewBag.Successful == "y")
+        {
+            <div class="alert alert-success">Receipt uploaded successfully!</div>
+        }
+        else if (ViewBag.Successful == "n")
+        {
+            <div class="alert alert-danger">Receipt upload failed.</div>
+        }
+        else if (ViewBag.Successful == "f")
+        {
+            <div class="alert alert-danger">File must be a in the format ".png", ".jpg" or ".jpeg"!</div>
+        }
 
-    <div>
-        @Html.TextBox("file", "", new { type = "file", id = "filename" }) <br />
-        <input type="submit" value="Upload" />
-    </div>
+        <div>
+            @Html.TextBox("file", "", new { type = "file", id = "filename" }) <br />
+            <input type="submit" value="Upload" class="btn btn-success" />
+        </div>
+    }
+}
+else
+{
+    <h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
 }

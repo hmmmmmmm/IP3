@@ -1,0 +1,32 @@
+﻿@using IP3_Group4.Models
+@model List<ShopCounter>
+
+<h2>All Visited Shops</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p>An overview of all the shops you have visited.</p>
+    <hr />
+
+    <table class="table">
+        <tr>
+            <th>Shop</th>
+            <th>Visits</th>
+            <th>Total Spent</th>
+        </tr>
+
+        @foreach (ShopCounter item in Model)
+        {
+            <tr>
+                <td>@item.Shop</td>
+                <td>@item.Visits</td>
+                <td>£@item.Spent</td>
+            </tr>
+        }
+
+    </table>
+} 
+else
+{
+<h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>            
+}

@@ -4,52 +4,59 @@
     ViewBag.Title = "Edit Receipt";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2>Edit Receipt</h2>
 
-@using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@if (User.Identity.IsAuthenticated)
 {
-@Html.AntiForgeryToken()
+    @using (Html.BeginForm("EditReceipt", "Receipt", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
 
-<table class="table">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
-    @Html.HiddenFor(model => model.UserID)
+        <table class="table">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.UserID)
 
-    <tr>
-        <th>Purchase Date</th>
-        <th>Payment Type</th>
-        <th>Shop</th>
-        <th></th>
-    </tr>
+            <tr>
+                <th>Purchase Date</th>
+                <th>Payment Type</th>
+                <th>Shop</th>
+                <th></th>
+            </tr>
 
-    <tr>
-        <td>
-            @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.PurchaseDate, "", new { @class = "text-danger" })
-        </td>
-
-
-        <td>
-            @Html.DropDownList("PaymentID", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PaymentID, "", new { @class = "text-danger" })
-        </td>
+            <tr>
+                <td>
+                    @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PurchaseDate, "", new { @class = "text-danger" })
+                </td>
 
 
-        <td>
-            @Html.EditorFor(model => model.Shop, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Shop, "", new { @class = "text-danger" })
-        </td>
-        <td class="td-flex">
+                <td>
+                    @Html.DropDownList("PaymentID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PaymentID, "", new { @class = "text-danger" })
+                </td>
 
-            @Html.ActionLink("Edit Product Lines", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
 
-        </td>
-    </tr>
+                <td>
+                    @Html.EditorFor(model => model.Shop, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Shop, "", new { @class = "text-danger" })
+                </td>
+                <td class="td-flex">
 
-    <tr><td><input type="submit" value="Save" class="btn btn-success" /></td></tr>
-</table>
+                    @Html.ActionLink("Edit Product Lines", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+
+                </td>
+            </tr>
+
+            <tr><td><input type="submit" value="Save" class="btn btn-success" /></td></tr>
+        </table>
+    }
+
+    <div>
+        @Html.ActionLink("Back to Receipts", "Overview")
+    </div>
 }
-
-<div>
-    @Html.ActionLink("Back to Receipts", "Overview")
-</div>
+else
+{
+    <h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
+}

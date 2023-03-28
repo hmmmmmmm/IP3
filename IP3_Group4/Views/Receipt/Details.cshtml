@@ -2,90 +2,98 @@
 @model Receipt
 
 @{
-        ViewBag.Title = "Details";
-        Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            Shop
-        </th>
-        <th>
-            Total Price
-        </th>
-        <th>
-            Purchase Date
-        </th>
-        <th>
-            Payment Type
-        </th>
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayFor(model => model.Shop)
-        </td>
-        <td>
-            £@Html.DisplayFor(model => model.TotalPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.PurchaseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.PaymentType.Type)
-        </td>
-    </tr>
-</table>
+@if (User.Identity.IsAuthenticated)
+{
+    <table class="table">
+        <tr>
+            <th>
+                Shop
+            </th>
+            <th>
+                Total Price
+            </th>
+            <th>
+                Purchase Date
+            </th>
+            <th>
+                Payment Type
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Shop)
+            </td>
+            <td>
+                £@Html.DisplayFor(model => model.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.PurchaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.PaymentType.Type)
+            </td>
+        </tr>
+    </table>
 
-<div class="flex-button">
-    @Html.ActionLink("Edit", "EditReceipt", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
-</div>
+    <div class="flex-button">
+        @Html.ActionLink("Edit", "EditReceipt", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+    </div>
 
-<hr />
-<h3>Products</h3>
+    <hr />
+    <h3>Products</h3>
 
-<table class="table">
-    <tr>
-        <th>
-            Item
-        </th>
-        <th>
-            Brand
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Total Price
-        </th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                Item
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Total Price
+            </th>
+        </tr>
 
-    @foreach (var item in Model.ProductLines) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ItemName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Brand)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            £@Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            £@Html.DisplayFor(modelItem => item.LineTotal)
-        </td>
-    </tr>
-            }
-</table>
+        @foreach (var item in Model.ProductLines)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    £@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    £@Html.DisplayFor(modelItem => item.LineTotal)
+                </td>
+            </tr>
+        }
+    </table>
 
-<div class="flex-button">
-    @Html.ActionLink("Edit Products", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
-</div>
+    <div class="flex-button">
+        @Html.ActionLink("Edit Products", "EditReceiptProdLines", "Receipt", new { id = Model.ID }, new { @class = "btn btn-warning" })
+    </div>
+}
+else
+{
+    <h4 class="alert alert-danger">You must be @Html.ActionLink("logged in", "Login", "Account") to view this page!</h4>
+}

@@ -27,13 +27,10 @@ namespace IP3_Group4.Controllers
         public ActionResult Stats() // Action for Spending page
         {
             ViewBag.HasReceipts = false;
-
-            if (GetUsersReceipts().Count > 0)
-            {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget()); // initialise analytics class to pass to views
+            if (analytics.AllReceipts.Any())
                 ViewBag.HasReceipts = true;
-            } 
-
-            return View();
+            return View(analytics);
         }
 
         [HttpGet]
@@ -77,6 +74,18 @@ namespace IP3_Group4.Controllers
                 ViewBag.Message = "Failed to set budget!"; // creates error message for view
                 return View(); // returns the view
             }
+        }
+
+        public ActionResult AllShopDetails()
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget());
+            return View(analytics.Shops);
+        }
+
+        public ActionResult AllProductDetails()
+        {
+            analytics = new Analytics(GetUsersReceipts(), GetUsersBudget());
+            return View(analytics.Products);
         }
 
         // CHART ACTIONS
