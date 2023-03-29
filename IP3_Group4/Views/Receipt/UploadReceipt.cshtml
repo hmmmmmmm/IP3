@@ -4,7 +4,7 @@
 <h2>Upload Receipt</h2>
 @if (User.Identity.IsAuthenticated)
 {
-    @using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("UploadReceipt", "Receipt", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         if (ViewBag.Successful == "y")
         {
