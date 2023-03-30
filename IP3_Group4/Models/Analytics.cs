@@ -178,7 +178,7 @@ namespace IP3_Group4.Models
 
         public void GenerateStats(int totalProds) // calculates the percentage of products bought this product is
         {
-            PercentageOfItemsBought = Math.Round((double)Buys / totalProds, 2); // does the maths and rounds to two decimal places
+            PercentageOfItemsBought = (double)(Buys / totalProds) * 100; // does the maths and rounds to two decimal places
         }
     }
 }
